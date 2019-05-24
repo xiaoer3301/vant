@@ -1,6 +1,6 @@
-## IndexBar 索引栏
+# IndexBar 索引栏
 
-### 使用指南
+### 引入
 
 ``` javascript
 import { IndexBar, IndexAnchor } from 'vant';
@@ -8,9 +8,9 @@ import { IndexBar, IndexAnchor } from 'vant';
 Vue.use(IndexBar).use(IndexAnchor);
 ```
 
-### 代码演示
+## 代码演示
 
-#### 基础用法
+### 基础用法
 
 点击索引栏时，会自动跳转到对应的`IndexAnchor`锚点位置
 
@@ -30,7 +30,7 @@ Vue.use(IndexBar).use(IndexAnchor);
 </van-index-bar>
 ```
 
-#### 自定义索引列表
+### 自定义索引列表
 
 可以通过`index-list`属性自定义展示的索引字符列表，
 
@@ -60,11 +60,14 @@ export default {
 }
 ```
 
+## API
+
 ### IndexBar Props
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
 | index-list | 索引字符列表 | `Array` | `A-Z` | - |
+| z-index | z-index 层级 | `Number` | `1` | - |
 
 ### IndexAnchor Props
 

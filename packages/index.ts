@@ -30,6 +30,7 @@ import GoodsAction from './goods-action';
 import GoodsActionButton from './goods-action-button';
 import GoodsActionIcon from './goods-action-icon';
 import Icon from './icon';
+import Image from './image';
 import ImagePreview from './image-preview';
 import IndexAnchor from './index-anchor';
 import IndexBar from './index-bar';
@@ -84,7 +85,7 @@ declare global {
   }
 }
 
-const version = '1.6.17';
+const version = '2.0.0-beta.0';
 const components = [
   ActionSheet,
   AddressEdit,
@@ -115,6 +116,7 @@ const components = [
   GoodsActionButton,
   GoodsActionIcon,
   Icon,
+  Image,
   ImagePreview,
   IndexAnchor,
   IndexBar,
@@ -205,6 +207,7 @@ export {
   GoodsActionButton,
   GoodsActionIcon,
   Icon,
+  Image,
   ImagePreview,
   IndexAnchor,
   IndexBar,

@@ -1,16 +1,20 @@
-## PasswordInput
+# PasswordInput
+
+### Intro
+
 The PasswordInput component is usually used with [NumberKeyboard](#/en-US/number-keyboard) Component.
 
 ### Install
+
 ``` javascript
 import { PasswordInput, NumberKeyboard } from 'vant';
 
 Vue.use(PasswordInput).use(NumberKeyboard);
 ```
 
-### Usage
+## Usage
 
-#### Basic Usage
+### Basic Usage
 
 ```html
 <!-- PasswordInput -->
@@ -49,7 +53,18 @@ export default {
 }
 ```
 
-#### Without mask
+### Custom length
+
+```html
+<van-password-input
+  :value="value"
+  :length="4"
+  :gutter="15"
+  @focus="showKeyboard = true"
+/>
+```
+
+### Without mask
 
 ```html
 <van-password-input
@@ -58,6 +73,8 @@ export default {
   @focus="showKeyboard = true"
 />
 ```
+
+## API
 
 ### Props
 
@@ -68,6 +85,7 @@ export default {
 | mask | Whether to mask value | `Boolean` | `true` |
 | info | Bottom info | `String` | - |
 | error-info | Bottom error info | `String` | - |
+| gutter | Gutter of input | `Number | String` | `0` |
 
 ### Events
 

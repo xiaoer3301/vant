@@ -1,4 +1,4 @@
-## DropdownMenu
+# DropdownMenu
 
 ### Install
 
@@ -8,9 +8,9 @@ import { DropdownMenu, DropdownItem } from 'vant';
 Vue.use(DropdownMenu).use(DropdownItem);
 ```
 
-### Usage
+## Usage
 
-#### Basic Usage
+### Basic Usage
 
 ```html
 <van-dropdown-menu>
@@ -76,12 +76,15 @@ export default {
 };
 ```
 
+## API
+
 ### DropdownMenu Props
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|------|
 | active-color | Active color of title and option | `String` | `#1989fa` |
 | z-index | z-index of menu item | `Number` | `10` |
+| duration | Transition duration, unit second | `Number` | `0.2` |
 | overlay | Whether to show overlay | `Boolean` | `true` |
 | close-on-click-overlay | Whether to close when click overlay | `Boolean` | `true` |
 
@@ -92,12 +95,17 @@ export default {
 | value | Value of current option，can use `v-model` | `String | Number` | - |
 | title | Item title | `String` | Text of selected option |
 | options | Options | `Array` | `[]` |
+| disabled | Whether to disable dropdown item | `Boolean` | `false` |
+| title-class | Title class | `String` | - |
 
 ### DropdownItem Events
 
 | Event | Description | Arguments |
 |------|------|------|
 | change | Triggered select option and value changed | value |
+| open | Triggered when open menu | - |
+| opened | Triggered when opened menu | - |
+| close | Triggered when close menu | - |
 
 ### DropdownItem Methods
 

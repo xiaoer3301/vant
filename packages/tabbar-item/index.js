@@ -1,4 +1,4 @@
-import { use } from '../utils';
+import { use, isObj } from '../utils';
 import Icon from '../icon';
 import Info from '../info';
 import { route, routeProps } from '../utils/router';
@@ -13,6 +13,7 @@ export default sfc({
     ...routeProps,
     icon: String,
     dot: Boolean,
+    name: [String, Number],
     info: [String, Number]
   },
 
@@ -22,16 +23,27 @@ export default sfc({
     };
   },
 
+  computed: {
+    routeActive() {
+      const { to, $route } = this;
+      if (to && $route) {
+        const path = isObj(to) ? to.path : to;
+        return $route.path === path;
+      }
+    }
+  },
+
   methods: {
     onClick(event) {
-      this.parent.onChange(this.index);
+      this.parent.onChange(this.name || this.index);
       this.$emit('click', event);
       route(this.$router, this);
     }
   },
 
   render(h) {
-    const { icon, slots, active } = this;
+    const { icon, slots } = this;
+    const active = this.parent.route ? this.routeActive : this.active;
     const color = this.parent[active ? 'activeColor' : 'inactiveColor'];
 
     return (

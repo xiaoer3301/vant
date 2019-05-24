@@ -1,6 +1,6 @@
-## DropdownMenu 下拉菜单
+# DropdownMenu 下拉菜单
 
-### 使用指南
+### 引入
 
 ``` javascript
 import { DropdownMenu, DropdownItem } from 'vant';
@@ -8,9 +8,9 @@ import { DropdownMenu, DropdownItem } from 'vant';
 Vue.use(DropdownMenu).use(DropdownItem);
 ```
 
-### 代码演示
+## 代码演示
 
-#### 基础用法
+### 基础用法
 
 ```html
 <van-dropdown-menu>
@@ -78,12 +78,24 @@ export default {
 };
 ```
 
+### 禁用菜单
+
+```html
+<van-dropdown-menu>
+  <van-dropdown-item v-model="value1" disabled :options="option1" />
+  <van-dropdown-item v-model="value2" disabled :options="option2" />
+</van-dropdown-menu>
+```
+
+## API
+
 ### DropdownMenu Props
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
 | active-color | 菜单标题和选项的选中态颜色 | `String` | `#1989fa` | - |
 | z-index | 菜单栏 z-index 层级 | `Number` | `10` | - |
+| duration | 动画时长，单位秒 | `Number` | `0.2` | 2.0.0 |
 | overlay | 是否显示遮罩层 | `Boolean` | `true` | - |
 | close-on-click-overlay | 是否在点击遮罩层后关闭菜单 | `Boolean` | `true` | - |
 
@@ -94,12 +106,17 @@ export default {
 | value | 当前选中项对应的 value，可以通过`v-model`双向绑定 | `String | Number` | - | - |
 | title | 菜单项标题 | `String` | 当前选中项文字 | - |
 | options | 选项数组 | `Array` | `[]` | - |
+| disabled | 是否禁用菜单 | `Boolean` | `false` | - |
+| title-class | 标题额外类名 | `String` | - | - |
 
 ### DropdownItem Events
 
 | 事件名 | 说明 | 回调参数 |
 |------|------|------|
 | change | 点击选项导致 value 变化时触发 | value |
+| open | 打开菜单栏时触发 | - |
+| opened | 打开菜单栏且动画结束后触发 | - |
+| close | 关闭菜单栏时触发 | - |
 
 ### DropdownItem 方法
 

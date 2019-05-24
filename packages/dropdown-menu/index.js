@@ -20,6 +20,10 @@ export default sfc({
       type: Number,
       default: 10
     },
+    duration: {
+      type: Number,
+      default: 0.2
+    },
     activeColor: {
       type: String,
       default: BLUE
@@ -45,15 +49,15 @@ export default sfc({
       this.children.forEach((item, index) => {
         if (index === active) {
           item.toggle();
-        } else {
-          item.toggle(false);
+        } else if (item.showPopup) {
+          item.hide(true);
         }
       });
     },
 
     onClickOutside() {
       this.children.forEach(item => {
-        item.toggle(false);
+        item.hide();
       });
     }
   },
@@ -61,14 +65,16 @@ export default sfc({
   render(h) {
     const Titles = this.children.map((item, index) => (
       <div
-        class={bem('item')}
+        class={bem('item', { disabled: item.disabled })}
         onClick={() => {
-          this.toggleItem(index);
+          if (!item.disabled) {
+            this.toggleItem(index);
+          }
         }}
       >
         <span
-          class={bem('title', { active: item.show })}
-          style={{ color: item.show ? this.activeColor : '' }}
+          class={[bem('title', { active: item.show }), item.titleClass]}
+          style={{ color: item.showPopup ? this.activeColor : '' }}
         >
           {item.displayTitle}
         </span>

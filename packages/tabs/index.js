@@ -29,6 +29,10 @@ export default sfc({
     background: String,
     titleActiveColor: String,
     titleInactiveColor: String,
+    border: {
+      type: Boolean,
+      default: true
+    },
     ellipsis: {
       type: Boolean,
       default: true
@@ -111,7 +115,7 @@ export default sfc({
     trackStyle() {
       if (this.animated) {
         return {
-          left: `${-1 * this.curActive * 100}%`,
+          transform: `translate3d(${-1 * this.curActive * 100}%, 0, 0)`,
           transitionDuration: `${this.duration}s`
         };
       }
@@ -409,6 +413,8 @@ export default sfc({
       <div
         ref="tabs"
         refInFor
+        role="tab"
+        aria-selected={index === this.curActive}
         class={tabBem({
           active: index === this.curActive,
           disabled: tab.disabled,
@@ -432,10 +438,10 @@ export default sfc({
           style={this.wrapStyle}
           class={[
             bem('wrap', { scrollable }),
-            { 'van-hairline--top-bottom': type === 'line' }
+            { 'van-hairline--top-bottom': type === 'line' && this.border }
           ]}
         >
-          <div ref="nav" class={bem('nav', [type])} style={this.navStyle}>
+          <div ref="nav" role="tablist" class={bem('nav', [type])} style={this.navStyle}>
             {this.slots('nav-left')}
             {type === 'line' && <div class={bem('line')} style={this.lineStyle} />}
             {Nav}

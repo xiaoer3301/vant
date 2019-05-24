@@ -2,12 +2,12 @@ import { use } from '../utils';
 import { emit, inherit } from '../utils/functional';
 import { PopupMixin } from '../mixins/popup';
 import Icon from '../icon';
-import Loading from '../loading';
 import Popup from '../popup';
+import Loading from '../loading';
 
 // Types
 import { CreateElement, RenderContext } from 'vue/types';
-import { DefaultSlots } from '../utils/use/sfc';
+import { DefaultSlots } from '../utils/types';
 import { PopupMixinProps } from '../mixins/popup/type';
 
 export type ActionSheetItem = {
@@ -37,6 +37,10 @@ function ActionSheet(
 ) {
   const { title, cancelText } = props;
 
+  function onInput(value: boolean) {
+    emit(ctx, 'input', value);
+  }
+
   function onCancel() {
     emit(ctx, 'input', false);
     emit(ctx, 'cancel');
@@ -53,8 +57,16 @@ function ActionSheet(
     }
   }
 
-  function onClickOption(item: ActionSheetItem, index: number) {
-    return function (event: Event) {
+  function Content() {
+    if (slots.default) {
+      return <div class={bem('content')}>{slots.default()}</div>;
+    }
+  }
+
+  function Option(item: ActionSheetItem, index: number) {
+    const disabled = item.disabled || item.loading;
+
+    function onClickOption(event: MouseEvent) {
       event.stopPropagation();
 
       if (item.disabled || item.loading) {
@@ -70,51 +82,56 @@ function ActionSheet(
       if (props.closeOnClickAction) {
         emit(ctx, 'input', false);
       }
-    };
+    }
+
+    function OptionContent() {
+      if (item.loading) {
+        return <Loading size="20px" />;
+      }
+
+      return [
+        <span class={bem('name')}>{item.name}</span>,
+        item.subname && <span class={bem('subname')}>{item.subname}</span>
+      ];
+    }
+
+    return (
+      <div
+        class={[bem('item', { disabled }), item.className, 'van-hairline--top']}
+        onClick={onClickOption}
+      >
+        {OptionContent()}
+      </div>
+    );
   }
 
-  const Option = (item: ActionSheetItem, index: number) => (
-    <div
-      class={[
-        bem('item', { disabled: item.disabled || item.loading }),
-        item.className,
-        'van-hairline--top'
-      ]}
-      onClick={onClickOption(item, index)}
-    >
-      {item.loading ? (
-        <Loading class={bem('loading')} size="20px" />
-      ) : (
-        [
-          <span class={bem('name')}>{item.name}</span>,
-          item.subname && <span class={bem('subname')}>{item.subname}</span>
-        ]
-      )}
-    </div>
-  );
+  function CancelText() {
+    if (cancelText) {
+      return (
+        <div class={bem('cancel')} onClick={onCancel}>
+          {cancelText}
+        </div>
+      );
+    }
+  }
 
   return (
     <Popup
       class={bem({ 'safe-area-inset-bottom': props.safeAreaInsetBottom })}
-      value={props.value}
       position="bottom"
+      value={props.value}
       overlay={props.overlay}
       lazyRender={props.lazyRender}
+      lockScroll={props.lockScroll}
       getContainer={props.getContainer}
       closeOnClickOverlay={props.closeOnClickOverlay}
-      onInput={(value: boolean) => {
-        emit(ctx, 'input', value);
-      }}
+      onInput={onInput}
       {...inherit(ctx)}
     >
       {Header()}
       {props.actions.map(Option)}
-      {slots.default && <div class={bem('content')}>{slots.default()}</div>}
-      {cancelText && (
-        <div class={bem('cancel')} onClick={onCancel}>
-          {cancelText}
-        </div>
-      )}
+      {Content()}
+      {CancelText()}
     </Popup>
   );
 }

@@ -1,15 +1,16 @@
-## Tabbar
+# Tabbar
 
 ### Install
+
 ``` javascript
 import { Tabbar, TabbarItem } from 'vant';
 
 Vue.use(Tabbar).use(TabbarItem);
 ```
 
-### Usage
+## Usage
 
-#### Basic Usage
+### Basic Usage
 
 ```html
 <van-tabbar v-model="active">
@@ -30,7 +31,28 @@ export default {
 }
 ```
 
-#### Show Badge
+### Item Name
+
+```html
+<van-tabbar v-model="active">
+  <van-tabbar-item name="home" icon="home-o">Tab</van-tabbar-item>
+  <van-tabbar-item name="search" icon="search">Tab</van-tabbar-item>
+  <van-tabbar-item name="friends" icon="friends-o">Tab</van-tabbar-item>
+  <van-tabbar-item name="setting" icon="setting-o">Tab</van-tabbar-item>
+</van-tabbar>
+```
+
+```javascript
+export default {
+  data() {
+    return {
+      active: 'home'
+    }
+  }
+}
+```
+
+### Show Badge
 
 ```html
 <van-tabbar v-model="active">
@@ -41,7 +63,7 @@ export default {
 </van-tabbar>
 ```
 
-#### Custom Icon
+### Custom Icon
 
 Use `icon` slot to custom icon
 
@@ -74,7 +96,7 @@ export default {
 }
 ```
 
-#### Custom Color
+### Custom Color
 
 ```html
 <van-tabbar
@@ -89,15 +111,42 @@ export default {
 </van-tabbar>
 ```
 
+### Route Mode
+
+```html
+<router-view />
+
+<van-tabbar route>
+  <van-tabbar-item
+    replace
+    to="/home"
+    icon="home-o"
+  >
+    Tab
+  </van-tabbar-item>
+  <van-tabbar-item
+    replace
+    to="/search"
+    icon="search"
+  >
+    Tab
+  </van-tabbar-item>
+</van-tabbar>
+```
+
+## API
+
 ### Tabbar Props
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
-| v-model | Index of current tab | `Number` | - |
+| v-model | Identifier of current tab | `String | Number` | `0` |
 | fixed | Whether to fixed bottom | `Boolean` | `true` |
+| border | Whether to show border | `Boolean` | `true` |
 | z-index | Z-index | `Number` | `1` |
 | active-color | Color of active tab item | `String` | `#1989fa` |
 | inactive-color | Color of inactive tab item | `String` | `#7d7e80` |
+| route | Whether to enable route mode | `Boolean` | `false` |
 | safe-area-inset-bottom | Whether to enable bottom safe area adaptation, to enable those features use `viewport-fit=cover` in the `viewport` meta tag | `Boolean` | `false` |
 
 ### Tabbar Events
@@ -110,6 +159,7 @@ export default {
 
 | Attribute | Description | Type | Default |
 |------|------|------|------|
+| name | Identifier | `String | Number` | Item index |
 | icon | Icon name | `String` | - |
 | dot | Whether to show red dot | `Boolean` | - |
 | info | Info message | `String | Number` | - |

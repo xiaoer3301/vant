@@ -24,7 +24,7 @@
 
 ## Features
 
-* 50+ Reusable components
+* 55+ Reusable components
 * 90% Unit test coverage
 * Extensive documentation and demos
 * Support [babel-plugin-import](https://github.com/ant-design/babel-plugin-import)
@@ -124,7 +124,7 @@ Modern browsers and Android 4.0+, iOS 6+.
 * [Changelog](https://youzan.github.io/vant#/en-US/changelog)
 * [Vant Demo](https://github.com/youzan/vant-demo)
 * [Vant Weapp: Weapp UI](https://github.com/youzan/vant-weapp)
-* [Zent: PC UI base on React](https://www.youzanyun.com/zanui/zent)
+* [Zent: PC UI base on React](https://youzan.github.io/zent)
 
 
 ## Preview

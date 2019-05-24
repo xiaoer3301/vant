@@ -1,4 +1,7 @@
-## DatetimePicker
+# DatetimePicker
+
+### Intro
+
 The DatetimePicker component is usually used with [Popup](#/en-US/popup) Component.
 
 ### Install
@@ -8,9 +11,9 @@ import { DatetimePicker } from 'vant';
 Vue.use(DatetimePicker);
 ```
 
-### Usage
+## Usage
 
-#### Choose DateTime
+### Choose DateTime
 
 ```html
 <van-datetime-picker
@@ -35,7 +38,7 @@ export default {
 };
 ```
 
-#### Choose Date
+### Choose Date
 
 ```html
 <van-datetime-picker
@@ -55,7 +58,7 @@ export default {
 }
 ```
 
-#### Choose Year-Month
+### Choose Year-Month
 
 ```html
 <van-datetime-picker
@@ -87,14 +90,14 @@ export default {
 }
 ```
 
-#### Choose Time
+### Choose Time
 
 ```html
 <van-datetime-picker
-  v-model="currentDate"
+  v-model="currentTime"
   type="time"
-  :min-hour="minHour"
-  :max-hour="maxHour"
+  :min-hour="10"
+  :max-hour="20"
 />
 ```
 
@@ -102,11 +105,43 @@ export default {
 export default {
   data() {
     return {
-      currentDate: '12:00'
+      currentTime: '12:00'
     };
   }
 }
 ```
+
+### Option Filter
+
+```html
+<van-datetime-picker
+  v-model="currentTime"
+  type="time"
+  :filter="filter"
+/>
+```
+
+```js
+export default {
+  data() {
+    return {
+      currentTime: '12:00'
+    };
+  },
+
+  methods: {
+    filter(type, options) {
+      if (type === 'minute') {
+        return options.filter(option => option % 5 === 0)
+      }
+
+      return options;
+    }
+  }
+}
+```
+
+## API
 
 ### Props
 
@@ -119,6 +154,7 @@ export default {
 | max-hour | Max hour for `time` type | `Number` | `23` |
 | min-minute | Max minute for `time` type | `Number` | `0` |
 | max-minute | Max minute for `time` type | `Number` | `59` |
+| filter | Option filter | `(type, values) => values` | - |
 | formatter | Option text formatter | `(type, value) => value` | - |
 | title | Toolbar title | `String` | `''` |
 | loading | Whether to show loading prompt | `Boolean` | `false` |

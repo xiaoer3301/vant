@@ -1,15 +1,15 @@
-## ActionSheet 上拉菜单
+# ActionSheet 上拉菜单
 
-### 使用指南
+### 引入
 ``` javascript
 import { ActionSheet } from 'vant';
 
 Vue.use(ActionSheet);
 ```
 
-### 代码演示
+## 代码演示
 
-#### 基础用法
+### 基础用法
 
 `ActionSheet`通过`actions`数组来定义展示的选项，数组的每一项是一个对象，对象属性见文档下方表格。
 
@@ -44,7 +44,7 @@ export default {
 }
 ```
 
-#### 选项状态
+### 选项状态
 
 选项可以设置为加载状态或禁用状态
 
@@ -70,7 +70,7 @@ export default {
 }
 ```
 
-#### 展示取消按钮
+### 展示取消按钮
 
 设置`cancelText`属性后，会在底部展示取消按钮，点击后关闭当前菜单
 
@@ -84,7 +84,7 @@ export default {
 />
 ```
 
-#### 展示标题栏
+### 展示标题栏
 
 通过设置`title`属性展示标题栏，同时可以使用插槽自定义菜单内容
 
@@ -93,6 +93,8 @@ export default {
   <p>内容</p>
 </van-action-sheet>
 ```
+
+## API
 
 ### Props
 
@@ -105,6 +107,7 @@ export default {
 | close-on-click-action | 是否在点击选项后关闭 | `Boolean` | `false` | 2.0.0 |
 | close-on-click-overlay | 是否在点击遮罩层后关闭 | `Boolean` | `true` | - |
 | lazy-render | 是否在显示弹层时才渲染节点 | `Boolean` | `true` | 1.1.11 |
+| lock-scroll | 是否锁定背景滚动 | `Boolean` | `true` | 2.0.0 |
 | get-container | 指定挂载的节点，可以传入选择器，<br>或一个返回节点的函数 | `String | () => HTMLElement` | - | - |
 | safe-area-inset-bottom | 是否开启 iPhone X 底部安全区适配，需要在 `viewport` meta 标签中设置 `viewport-fit=cover` | `Boolean` | `false` | 1.6.15 |
 

@@ -1,4 +1,4 @@
-import { use, isDef } from '../utils';
+import { use } from '../utils';
 import Cell from '../cell';
 import Icon from '../icon';
 import Popup from '../popup';
@@ -12,12 +12,16 @@ export default sfc({
   props: {
     value: null,
     title: String,
-    options: Array
+    options: Array,
+    disabled: Boolean,
+    titleClass: String
   },
 
   data() {
     return {
-      show: false
+      transition: true,
+      showPopup: false,
+      showWrapper: false
     };
   },
 
@@ -34,12 +38,24 @@ export default sfc({
 
   methods: {
     toggle(show) {
-      this.show = isDef(show) ? show : !this.show;
+      this.showPopup = !this.showPopup;
+
+      if (this.showPopup) {
+        this.showWrapper = true;
+      }
+    },
+
+    hide(skipTransition) {
+      this.showPopup = false;
+
+      if (skipTransition) {
+        this.transition = false;
+      }
     }
   },
 
   render(h) {
-    const { top, zIndex, overlay, activeColor, closeOnClickOverlay } = this.parent;
+    const { top, zIndex, overlay, duration, activeColor, closeOnClickOverlay } = this.parent;
 
     const Options = this.options.map(option => {
       const active = option.value === this.value;
@@ -50,7 +66,7 @@ export default sfc({
           title={option.text}
           titleStyle={{ color: active ? activeColor : '' }}
           onClick={() => {
-            this.show = false;
+            this.showPopup = false;
 
             if (option.value !== this.value) {
               this.$emit('input', option.value);
@@ -63,16 +79,26 @@ export default sfc({
       );
     });
 
+    const emit = eventName => () => this.$emit(eventName);
+
     return (
-      <div vShow={this.show} style={{ top: `${top}px`, zIndex }} class={bem()}>
+      <div vShow={this.showWrapper} style={{ top: `${top}px`, zIndex }} class={bem()}>
         <Popup
-          vModel={this.show}
+          vModel={this.showPopup}
           position="top"
-          duration={0.2}
+          duration={this.transition ? duration : 0}
           class={bem('content')}
           overlay={overlay}
           closeOnClickOverlay={closeOnClickOverlay}
           overlayStyle={{ position: 'absolute' }}
+          onOpen={emit('open')}
+          onOpened={emit('opened')}
+          onClose={emit('close')}
+          onClosed={() => {
+            this.transition = true;
+            this.showWrapper = false;
+            this.$emit('closed');
+          }}
         >
           {Options}
           {this.slots('default')}

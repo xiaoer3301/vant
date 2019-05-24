@@ -1,9 +1,8 @@
-import { use, range } from '../utils';
+import { use, range, padZero } from '../utils';
 import Picker from '../picker';
 import { pickerProps } from '../picker/shared';
 import {
   times,
-  padZero,
   isValidDate,
   getTrueValue,
   getMonthEndDay
@@ -16,6 +15,7 @@ export default sfc({
   props: {
     ...pickerProps,
     value: null,
+    filter: Function,
     minHour: Number,
     minMinute: Number,
     type: {
@@ -147,11 +147,14 @@ export default sfc({
 
     columns() {
       const results = this.ranges.map(({ type, range: rangeArr }) => {
-        const values = times(rangeArr[1] - rangeArr[0] + 1, index => {
-          let value = rangeArr[0] + index;
-          value = value < 10 ? `0${value}` : `${value}`;
+        let values = times(rangeArr[1] - rangeArr[0] + 1, index => {
+          const value = padZero(rangeArr[0] + index);
           return this.formatter(type, value);
         });
+
+        if (this.filter) {
+          values = this.filter(type, values);
+        }
 
         return {
           values
@@ -170,11 +173,11 @@ export default sfc({
     correctValue(value) {
       // validate value
       const isDateType = this.type !== 'time';
+
       if (isDateType && !isValidDate(value)) {
         value = this.minDate;
       } else if (!value) {
-        const { minHour } = this;
-        value = `${minHour > 10 ? minHour : '0' + minHour}:00`;
+        value = `${padZero(this.minHour)}:00`;
       }
 
       // time type

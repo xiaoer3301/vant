@@ -1,16 +1,20 @@
-## DatetimePicker 时间选择
+# DatetimePicker 时间选择
+
+### 介绍
+
 时间选择组件通常与 [弹出层](#/zh-CN/popup) 组件配合使用
 
-### 使用指南
+### 引入
+
 ``` javascript
 import { DatetimePicker } from 'vant';
 
 Vue.use(DatetimePicker);
 ```
 
-### 代码演示
+## 代码演示
 
-#### 选择完整时间
+### 选择完整时间
 
 ```html
 <van-datetime-picker
@@ -35,7 +39,7 @@ export default {
 };
 ```
 
-#### 选择日期（年月日）
+### 选择日期（年月日）
 
 ```html
 <van-datetime-picker
@@ -55,8 +59,9 @@ export default {
 }
 ```
 
-#### 选择日期（年月）
-通过传入 `formatter` 函数对选项文字进行处理
+### 选择日期（年月）
+
+通过传入`formatter`函数，可以对选项文字进行格式化处理
 
 ```html
 <van-datetime-picker
@@ -88,14 +93,14 @@ export default {
 }
 ```
 
-#### 选择时间
+### 选择时间
 
 ```html
 <van-datetime-picker
-  v-model="currentDate"
+  v-model="currentTime"
   type="time"
-  :min-hour="minHour"
-  :max-hour="maxHour"
+  :min-hour="10"
+  :max-hour="20"
 />
 ```
 
@@ -103,11 +108,45 @@ export default {
 export default {
   data() {
     return {
-      currentDate: '12:00'
+      currentTime: '12:00'
     };
   }
 }
 ```
+
+### 选项过滤器
+
+通过传入`filter`函数，可以对选项数组进行过滤，实现自定义时间间隔
+
+```html
+<van-datetime-picker
+  v-model="currentTime"
+  type="time"
+  :filter="filter"
+/>
+```
+
+```js
+export default {
+  data() {
+    return {
+      currentTime: '12:00'
+    };
+  },
+
+  methods: {
+    filter(type, options) {
+      if (type === 'minute') {
+        return options.filter(option => option % 5 === 0)
+      }
+
+      return options;
+    }
+  }
+}
+```
+
+## API
 
 ### Props
 
@@ -120,6 +159,7 @@ export default {
 | max-hour | 可选的最大小时，针对 time 类型 | `Number` | `23` | - |
 | min-minute | 可选的最小分钟，针对 time 类型 | `Number` | `0` | 1.1.15 |
 | max-minute | 可选的最大分钟，针对 time 类型 | `Number` | `59` | 1.1.15 |
+| filter | 选项过滤函数 | `(type, values) => values` | - | 2.0.0 |
 | formatter | 选项格式化函数 | `(type, value) => value` | - | 1.1.14 |
 | title | 顶部栏标题 | `String` | `''` | 1.0.4 |
 | show-toolbar | 是否显示顶部栏 | `Boolean` | `false` | 1.0.2 |

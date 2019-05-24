@@ -4,7 +4,6 @@
       v-show="title"
       class="van-doc-nav-bar"
       :title="title"
-      :border="false"
       :left-arrow="showNav"
       @click-left="onBack"
     >
@@ -68,10 +67,10 @@ export default {
 @import '../../packages/style/var';
 
 body {
-  line-height: 1;
   color: @text-color;
-  background-color: #f2f3f5;
   font-family: 'PingFang SC', Helvetica, 'STHeiti STXihei', 'Microsoft YaHei', Tohoma, Arial, sans-serif;
+  line-height: 1;
+  background-color: #f8f8f8;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -90,9 +89,9 @@ body {
   }
 
   .van-icon {
+    color: @gray-dark;
     font-size: 24px;
     cursor: pointer;
-    color: @gray-dark;
   }
 }
 
