@@ -25,6 +25,11 @@ function Notify(options: NotifyOptions) {
           if (instance.onClick) {
             instance.onClick(event);
           }
+        },
+        opened() {
+          if (instance.onOpened) {
+            instance.onOpened();
+          }
         }
       }
     });
@@ -53,13 +58,19 @@ function defaultOptions(): NotifyOptions {
     background: RED,
     duration: 3000,
     className: '',
-    onClick: null
+    onClose: null,
+    onClick: null,
+    onOpened: null
   };
 }
 
 Notify.clear = () => {
   if (instance) {
     instance.value = false;
+
+    if (instance.onClose) {
+      instance.onClose();
+    }
   }
 };
 

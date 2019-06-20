@@ -1,6 +1,7 @@
 import { deepClone } from '../utils/deep-clone';
-import { use, isObj, range } from '../utils';
-import { preventDefault } from '../utils/event';
+import { use, isObj } from '../utils';
+import { range } from '../utils/format/number';
+import { preventDefault } from '../utils/dom/event';
 import { TouchMixin } from '../mixins/touch';
 
 const DEFAULT_DURATION = 200;
@@ -8,7 +9,7 @@ const DEFAULT_DURATION = 200;
 // 惯性滑动思路:
 // 在手指离开屏幕时，如果和上一次 move 时的间隔小于 `MOMENTUM_LIMIT_TIME` 且 move
 // 距离大于 `MOMENTUM_LIMIT_DISTANCE` 时，执行惯性滑动，持续 `MOMENTUM_DURATION`
-const MOMENTUM_DURATION = 1500;
+const MOMENTUM_DURATION = 1000;
 const MOMENTUM_LIMIT_TIME = 300;
 const MOMENTUM_LIMIT_DISTANCE = 15;
 
@@ -129,12 +130,7 @@ export default sfc({
     },
 
     onTransitionEnd() {
-      this.moving = false;
-
-      if (this.transitionEndTrigger) {
-        this.transitionEndTrigger();
-        this.transitionEndTrigger = null;
-      }
+      this.stopMomentum();
     },
 
     onClickItem(index) {
@@ -205,13 +201,23 @@ export default sfc({
     momentum(distance, duration) {
       const speed = Math.abs(distance / duration);
 
-      distance = this.offset + speed / 0.0015 * (distance < 0 ? -1 : 1);
+      distance = this.offset + speed / 0.002 * (distance < 0 ? -1 : 1);
 
       const index = this.getIndexByOffset(distance);
 
       this.duration = MOMENTUM_DURATION;
       this.setIndex(index, true);
     },
+
+    stopMomentum() {
+      this.moving = false;
+      this.duration = 0;
+
+      if (this.transitionEndTrigger) {
+        this.transitionEndTrigger();
+        this.transitionEndTrigger = null;
+      }
+    }
   },
 
   render(h) {
@@ -222,6 +228,7 @@ export default sfc({
     const wrapperStyle = {
       transform: `translate3d(0, ${this.offset + baseOffset}px, 0)`,
       transitionDuration: `${this.duration}ms`,
+      transitionProperty: this.duration ? 'transform' : 'none',
       lineHeight: `${itemHeight}px`
     };
 

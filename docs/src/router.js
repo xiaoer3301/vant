@@ -1,19 +1,20 @@
 import Vue from 'vue';
 import docConfig from './doc.config';
 import DemoList from './components/DemoList';
-import componentDocs from './docs-entry';
-import componentDemos from './demo-entry';
 import DemoPages from './components/DemoPages';
+import { demoWrapper } from './demo-common';
 import './utils/iframe-router';
 
-const registerRoute = (isDemo) => {
-  const route = [{
-    path: '*',
-    redirect: () => `/${Vue.prototype.$vantLang}/`
-  }];
+const registerRoute = ({ mobile, componentMap }) => {
+  const route = [
+    {
+      path: '*',
+      redirect: () => `/${Vue.prototype.$vantLang}/`
+    }
+  ];
 
-  Object.keys(docConfig).forEach((lang) => {
-    if (isDemo) {
+  Object.keys(docConfig).forEach(lang => {
+    if (mobile) {
       route.push({
         path: `/${lang}`,
         component: DemoList,
@@ -34,8 +35,17 @@ const registerRoute = (isDemo) => {
         let component;
         if (path === 'demo') {
           component = DemoPages;
+        } else if (mobile) {
+          const module = componentMap[`./${path}/demo/index.vue`];
+          if (module) {
+            component = demoWrapper(module, path);
+          }
         } else {
-          component = isDemo ? componentDemos[path] : componentDocs[`${path}.${lang}`];
+          const module =
+            componentMap[`./${path}/${lang}.md`] ||
+            componentMap[`./${path}.${lang}.md`];
+
+          component = module.default;
         }
 
         if (!component) {

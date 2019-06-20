@@ -58,7 +58,11 @@
       />
       <van-button
         loading
+        type="primary"
         loading-type="spinner"
+      />
+      <van-button
+        loading
         :loading-text="$t('loadingText')"
         type="danger"
       />
@@ -74,6 +78,24 @@
         type="danger"
         round
         :text="$t('round')"
+      />
+    </demo-block>
+
+    <demo-block :title="$t('icon')">
+      <van-button
+        type="primary"
+        icon="star-o"
+      />
+      <van-button
+        type="primary"
+        icon="star-o"
+        :text="$t('button')"
+      />
+      <van-button
+        plain
+        type="primary"
+        icon="https://img.yzcdn.cn/vant/logo.png"
+        :text="$t('button')"
       />
     </demo-block>
 
@@ -112,6 +134,7 @@ export default {
     'zh-CN': {
       type: '按钮类型',
       size: '按钮尺寸',
+      icon: '图标按钮',
       loading: '加载状态',
       shape: '按钮形状',
       default: '默认按钮',
@@ -133,6 +156,7 @@ export default {
     'en-US': {
       type: 'Type',
       size: 'Size',
+      icon: 'Icon',
       loading: 'Loading',
       shape: 'Shape',
       default: 'Default',
@@ -158,8 +182,6 @@ export default {
 <style lang="less">
 .demo-button {
   .van-button {
-    user-select: none;
-
     &--large {
       margin-bottom: 15px;
     }

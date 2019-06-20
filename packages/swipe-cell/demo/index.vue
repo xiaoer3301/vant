@@ -3,35 +3,46 @@
     <demo-section>
       <van-notice-bar>{{ $t('tips') }}</van-notice-bar>
       <demo-block :title="$t('basicUsage')">
-        <van-swipe-cell
-          :right-width="65"
-          :left-width="65"
-        >
-          <span slot="left">{{ $t('button1') }}</span>
-          <van-cell-group>
-            <van-cell
-              :title="$t('title')"
-              :value="$t('content')"
-            />
-          </van-cell-group>
-          <span slot="right">{{ $t('button2') }}</span>
+        <van-swipe-cell>
+          <van-button
+            square
+            slot="left"
+            type="danger"
+            :text="$t('button1')"
+          />
+          <van-cell
+            :border="false"
+            :title="$t('title')"
+            :value="$t('content')"
+          />
+          <van-button
+            square
+            slot="right"
+            type="danger"
+            :text="$t('button2')"
+          />
         </van-swipe-cell>
       </demo-block>
 
       <demo-block :title="$t('title2')">
-        <van-swipe-cell
-          :right-width="65"
-          :left-width="65"
-          :on-close="onClose"
-        >
-          <span slot="left">{{ $t('button1') }}</span>
-          <van-cell-group>
-            <van-cell
-              :title="$t('title')"
-              :value="$t('content')"
-            />
-          </van-cell-group>
-          <span slot="right">{{ $t('button2') }}</span>
+        <van-swipe-cell :on-close="onClose">
+          <van-button
+            square
+            slot="left"
+            type="danger"
+            :text="$t('button1')"
+          />
+          <van-cell
+            :border="false"
+            :title="$t('title')"
+            :value="$t('content')"
+          />
+          <van-button
+            square
+            slot="right"
+            type="danger"
+            :text="$t('button2')"
+          />
         </van-swipe-cell>
       </demo-block>
     </demo-section>
@@ -85,19 +96,5 @@ export default {
 
 .demo-swipe-cell {
   user-select: none;
-
-  .van-swipe-cell {
-    &__left,
-    &__right {
-      display: inline-block;
-      width: 65px;
-      height: 44px;
-      color: @white;
-      font-size: 15px;
-      line-height: 44px;
-      text-align: center;
-      background-color: @red;
-    }
-  }
 }
 </style>

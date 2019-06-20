@@ -32,6 +32,20 @@ Toast.success('Success');
 Toast.fail('Fail');
 ```
 
+### Custom Icon
+
+```js
+Toast({
+  text: 'Custom Icon',
+  icon: 'like-o'
+});
+
+Toast({
+  text: 'Custom Image',
+  icon: 'https://img.yzcdn.cn/vant/logo.png'
+});
+```
+
 ### Advanced Usage
 
 ```javascript
@@ -102,10 +116,12 @@ toast2.clear();
 | type | Can be set to `loading` `success` `fail` `html` | `String` | `text` |
 | position | Can be set to `top` `middle` `bottom` | `String` | `middle` |
 | message | Message | `String` | `''` |
+| icon | Custom icon | `String` | - |
 | mask | Whether to show mask | `Boolean` | `false` |
 | forbidClick | Whether to forbid click background | `Boolean` | `false` |
 | loadingType | Loading icon type, can be set to `spinner` | `String` | `circular` |
 | duration | Toast duration(ms), won't disappear if value is 0 | `Number` | `3000` |
 | className | Custom className | `String | Array | Object` | - |
-| onClose | onClose callback function | `Function` | - |
+| onOpened | Callback function after opened | `Function` | - |
+| onClose | Callback function after close | `Function` | - |
 | getContainer | Return the mount node for Toast | `String | () => HTMLElement` | `body` |

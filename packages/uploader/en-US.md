@@ -13,49 +13,93 @@ Vue.use(Uploader);
 ### Basic Usage
 
 ```html
-<div class="uploader-container">
-  <van-uploader :after-read="onRead">
-    <van-icon name="photograph" />
-  </van-uploader>
-</div>
+<van-uploader :after-read="afterRead" />
 ```
 
 ```javascript
 export default {
   methods: {
-    onRead(file) {
+    afterRead(file) {
       console.log(file)
     }
   }
 };
 ```
 
-### Name
+### Preview Image
 
 ```html
-<van-uploader name="uploader" :after-read="onRead">
-  <van-icon name="photograph" />
-</van-uploader>
+<van-uploader v-model="fileList" multiple />
 ```
 
 ```javascript
 export default {
-  methods: {
-    onRead(file, detail) {
-      this.$toast(detail.name);
+  data() {
+    return {
+      fileList: []
     }
   }
 };
 ```
 
-### Set input attrs
-
-You can set native properties such as `accpet`、`multiple` on Uploader, and the input will automatically inherits the attribute.
+### Max Count
 
 ```html
-<van-uploader :after-read="onRead" accept="image/gif, image/jpeg" multiple>
-  <van-icon name="photograph" />
+<van-uploader
+  v-model="fileList"
+  multiple
+  :max-count="2"
+/>
+```
+
+```javascript
+export default {
+  data() {
+    return {
+      fileList: []
+    }
+  }
+};
+```
+
+### Upload Style
+
+```html
+<van-uploader>
+  <van-button icon="photo" type="primary">Upload Image</van-button>
 </van-uploader>
+```
+
+### Before Read
+
+```html
+<van-uploader :before-read="beforeRead" />
+```
+
+```js
+export default {
+  methods: {
+    beforeRead(file) {
+      if (file.type !== 'image/jpeg') {
+        Toast('Please upload an image in jpg format');
+        return false;
+      }
+    
+      return true;
+    },
+
+    asyncBeforeRead(file) {
+      return new Promise((resolve, reject) => {
+        if (file.type !== 'image/jpeg') {
+          Toast('Please upload an image in jpg format');
+          reject();
+        } else {
+          resolve();
+        }
+      });
+    }
+  }
+}
 ```
 
 ## API
@@ -65,18 +109,25 @@ You can set native properties such as `accpet`、`multiple` on Uploader, and the
 | Attribute | Description | Type | Default |
 |------|------|------|------|
 | name | Input name | `String` | - |
-| result-type | Type of file read result, can be set to `dataUrl` `text` | `String` | `dataUrl` |
 | accept | Accepted file type | `String` | `image/*` |
+| preview-image | Whether to show image preview | `Boolean` | `true` |
+| preview-size | Size of preview image | `String | Number` | `80px` |
+| multiple | Whether to enable multiple selection pictures | `Boolean` | `false` |
 | disabled | Whether to disabled the upload | `Boolean` | `false` |
-| before-read | Hook before reading the file, return false to stop reading the file | `Function` | - |
+| capture | Capture，can be set to `camera` | `String` | - |
+| before-read | Hook before reading the file, return false to stop reading the file, can return Promise | `Function` | - |
 | after-read | Hook after reading the file | `Function` | - |
 | max-size | Max size of file | `Number` | - |
+| max-count | Max count of image | `Number` | - |
+| result-type | Type of file read result, can be set to `dataUrl` `text` | `String` | `dataUrl` |
+| upload-text | Upload text | `String` | - |
 
 ### Events
 
 | Event | Description | Arguments |
 |------|------|------|
 | oversize | Triggered when file size over limit | Same as after-read |
+| delete | Triggered when delete preview file | file |
 
 ### Slots
 

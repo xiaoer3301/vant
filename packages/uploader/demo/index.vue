@@ -1,39 +1,40 @@
 <template>
   <demo-section>
     <demo-block :title="$t('basicUsage')">
-      <div class="demo-uploader-container">
-        <van-uploader
-          :max-size="102400"
-          @oversize="logContent('oversize')"
-          :before-read="beforeRead(1)"
-        >
-          <van-icon name="photograph" />
-        </van-uploader>
-      </div>
+      <van-uploader :after-read="afterRead" />
     </demo-block>
 
-    <demo-block :title="$t('name')">
-      <div class="demo-uploader-container">
-        <van-uploader
-          name="uploader"
-          :after-read="toastName"
-        >
-          <van-icon name="photograph" />
-        </van-uploader>
-      </div>
+    <demo-block :title="$t('preview')">
+      <van-uploader
+        v-model="fileList"
+        multiple
+      />
     </demo-block>
 
-    <demo-block :title="$t('title2')">
-      <div class="demo-uploader-container">
-        <van-uploader
-          accept="image/gif, image/jpeg"
-          multiple
-          :max-size="36000"
-          @oversize="logContent"
+    <demo-block :title="$t('maxCount')">
+      <van-uploader
+        v-model="fileList2"
+        multiple
+        :max-count="2"
+      />
+    </demo-block>
+
+    <demo-block :title="$t('uploadStyle')">
+      <van-uploader>
+        <van-button
+          type="primary"
+          icon="photo"
         >
-          <van-icon name="photograph" />
-        </van-uploader>
-      </div>
+          {{ this.$t('upload') }}
+        </van-button>
+      </van-uploader>
+    </demo-block>
+
+    <demo-block :title="$t('beforeRead')">
+      <van-uploader
+        v-model="fileList3"
+        :before-read="beforeRead"
+      />
     </demo-block>
   </demo-section>
 </template>
@@ -42,28 +43,43 @@
 export default {
   i18n: {
     'zh-CN': {
-      name: '标识名称',
-      title2: '设置 input 属性'
+      upload: '上传图片',
+      preview: '图片预览',
+      maxCount: '限制上传数量',
+      beforeRead: '上传前校验',
+      uploadStyle: '自定义上传样式',
+      invalidType: '请上传 jpg 格式图片'
     },
     'en-US': {
-      name: 'Name',
-      title2: 'Set input attrs'
+      upload: 'Upload Image',
+      preview: 'Preview Image',
+      maxCount: 'Max Count',
+      beforeRead: 'Before Read',
+      uploadStyle: 'Upload Style',
+      invalidType: 'Please upload an image in jpg format'
     }
   },
 
+  data() {
+    return {
+      fileList: [],
+      fileList2: [],
+      fileList3: []
+    };
+  },
+
   methods: {
-    logContent(file) {
+    beforeRead(file) {
+      if (file.type !== 'image/jpeg') {
+        this.$toast(this.$t('invalidType'));
+        return false;
+      }
+
+      return true;
+    },
+
+    afterRead(file) {
       console.log(file);
-    },
-
-    beforeRead(index) {
-      return file => {
-        console.log(index, file);
-      };
-    },
-
-    toastName(file, detail) {
-      this.$toast(detail.name);
     }
   }
 };
@@ -71,9 +87,10 @@ export default {
 
 <style lang="less">
 .demo-uploader {
-  &-container {
-    padding: 10px 20px;
-    font-size: 20px;
+  background-color: #fff;
+
+  .van-uploader {
+    margin-left: 15px;
   }
 }
 </style>

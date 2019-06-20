@@ -25,10 +25,10 @@ exports[`change tabs data 1`] = `
   </div>
   <div class="van-tabs__content">
     <div role="tabpanel" class="van-tab__pane">Text</div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
   </div>
@@ -48,10 +48,10 @@ exports[`change tabs data 2`] = `
   </div>
   <div class="van-tabs__content">
     <div role="tabpanel" class="van-tab__pane">Text</div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
   </div>
@@ -62,7 +62,7 @@ exports[`click to switch tab 1`] = `
 <div class="van-tabs van-tabs--line">
   <div class="van-tabs__wrap van-hairline--top-bottom">
     <div role="tablist" class="van-tabs__nav van-tabs__nav--line" style="border-color: #f44;">
-      <div class="van-tabs__line" style="background-color: rgb(255, 68, 68); width: 2px; transform: translateX(-1px);"></div>
+      <div class="van-tabs__line" style="background-color: rgb(255, 68, 68); width: 2px; transform: translateX(0px) translateX(-50%);"></div>
       <div role="tab" aria-selected="true" class="van-tab van-tab--active"><span class="van-ellipsis">title1</span></div>
       <div role="tab" class="van-tab">
         <div><span>title2</span></div>
@@ -72,10 +72,10 @@ exports[`click to switch tab 1`] = `
   </div>
   <div class="van-tabs__content">
     <div role="tabpanel" class="van-tab__pane" style="">Text</div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
   </div>
@@ -86,7 +86,7 @@ exports[`click to switch tab 2`] = `
 <div class="van-tabs van-tabs--line">
   <div class="van-tabs__wrap van-hairline--top-bottom">
     <div role="tablist" class="van-tabs__nav van-tabs__nav--line" style="border-color: #f44;">
-      <div class="van-tabs__line" style="background-color: rgb(255, 68, 68); width: 2px; transform: translateX(-1px); transition-duration: 0.3s;"></div>
+      <div class="van-tabs__line" style="background-color: rgb(255, 68, 68); width: 2px; transform: translateX(0px) translateX(-50%); transition-duration: 0.3s;"></div>
       <div role="tab" class="van-tab"><span class="van-ellipsis">title1</span></div>
       <div role="tab" class="van-tab van-tab--active" aria-selected="true">
         <div><span>title2</span></div>
@@ -95,11 +95,11 @@ exports[`click to switch tab 2`] = `
     </div>
   </div>
   <div class="van-tabs__content">
-    <div role="tabpanel" class="van-tab__pane" style="display: none;" aria-hidden="true">Text</div>
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">Text</div>
     <div role="tabpanel" class="van-tab__pane" style="">
       Text
     </div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
   </div>
@@ -118,11 +118,11 @@ exports[`lazy render 1`] = `
   </div>
   <div class="van-tabs__content">
     <div role="tabpanel" class="van-tab__pane">Text</div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
       <div><span>title2</span></div>
     </div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
   </div>
@@ -133,7 +133,7 @@ exports[`lazy render 2`] = `
 <div class="van-tabs van-tabs--line">
   <div class="van-tabs__wrap van-hairline--top-bottom">
     <div role="tablist" class="van-tabs__nav van-tabs__nav--line" style="border-color: #f44;">
-      <div class="van-tabs__line" style="background-color: rgb(255, 68, 68); width: 2px; transform: translateX(-1px);"></div>
+      <div class="van-tabs__line" style="background-color: rgb(255, 68, 68); width: 2px; transform: translateX(0px) translateX(-50%);"></div>
       <div role="tab" aria-selected="true" class="van-tab van-tab--active"><span class="van-ellipsis">title1</span></div>
       <div role="tab" class="van-tab">
         <div><span>title2</span></div>
@@ -143,10 +143,10 @@ exports[`lazy render 2`] = `
   </div>
   <div class="van-tabs__content">
     <div role="tabpanel" class="van-tab__pane">Text</div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       Text
     </div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">Text</div>
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">Text</div>
   </div>
 </div>
 `;
@@ -162,11 +162,11 @@ exports[`render nav-left & nav-right slot 1`] = `
   </div>
   <div class="van-tabs__content">
     <div role="tabpanel" class="van-tab__pane">Text</div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
       <div><span>title2</span></div>
     </div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
   </div>
@@ -187,10 +187,10 @@ exports[`swipe to switch tab 1`] = `
   </div>
   <div class="van-tabs__content">
     <div role="tabpanel" class="van-tab__pane">Text</div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
   </div>
@@ -210,11 +210,11 @@ exports[`swipe to switch tab 2`] = `
     </div>
   </div>
   <div class="van-tabs__content">
-    <div role="tabpanel" class="van-tab__pane" aria-hidden="true" style="display: none;">Text</div>
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">Text</div>
     <div role="tabpanel" class="van-tab__pane" style="">
       Text
     </div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
   </div>
@@ -234,11 +234,11 @@ exports[`swipe to switch tab 3`] = `
     </div>
   </div>
   <div class="van-tabs__content">
-    <div role="tabpanel" class="van-tab__pane" aria-hidden="true" style="display: none;">Text</div>
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">Text</div>
     <div role="tabpanel" class="van-tab__pane" style="">
       Text
     </div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
   </div>
@@ -259,10 +259,10 @@ exports[`swipe to switch tab 4`] = `
   </div>
   <div class="van-tabs__content">
     <div role="tabpanel" class="van-tab__pane" style="">Text</div>
-    <div role="tabpanel" class="van-tab__pane" style="display: none;" aria-hidden="true">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       Text
     </div>
-    <div role="tabpanel" aria-hidden="true" class="van-tab__pane" style="display: none;">
+    <div role="tabpanel" class="van-tab__pane" style="display: none;">
       <!---->
     </div>
   </div>

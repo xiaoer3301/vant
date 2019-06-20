@@ -1,4 +1,4 @@
-import { use, isDef } from '../utils';
+import { use, isDef, suffixPx } from '../utils';
 
 const [sfc, bem] = use('stepper');
 
@@ -7,7 +7,7 @@ export default sfc({
     value: null,
     integer: Boolean,
     disabled: Boolean,
-    inputWidth: String,
+    inputWidth: [String, Number],
     asyncChange: Boolean,
     disableInput: Boolean,
     min: {
@@ -136,10 +136,14 @@ export default sfc({
         />
         <input
           type="number"
+          role="spinbutton"
           class={bem('input')}
           value={this.currentValue}
+          aria-valuemax={this.max}
+          aria-valuemin={this.min}
+          aria-valuenow={this.currentValue}
           disabled={this.disabled || this.disableInput}
-          style={{ width: this.inputWidth }}
+          style={{ width: suffixPx(this.inputWidth) }}
           onInput={this.onInput}
           onFocus={this.onFocus}
           onBlur={this.onBlur}

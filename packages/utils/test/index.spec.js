@@ -1,16 +1,18 @@
 import { deepClone } from '../deep-clone';
-import { isAndroid, isDef, camelize, get } from '..';
-import { raf, cancel } from '../raf';
+import { deepAssign } from '../deep-assign';
+import { isDef, get } from '..';
+import { raf, cancelRaf } from '../dom/raf';
 import { later } from '../../../test/utils';
-import { isSrc } from '../validate/src';
 import { isEmail } from '../validate/email';
 import { isMobile } from '../validate/mobile';
 import { isNumber } from '../validate/number';
+import { isAndroid } from '../validate/system';
+import { camelize } from '../format/string';
 
 test('deepClone', () => {
   const a = { foo: 0 };
   const b = { foo: 0, bar: 1 };
-  const fn = () => { };
+  const fn = () => {};
   const arr = [a, b];
   expect(deepClone(a)).toEqual(a);
   expect(deepClone(b)).toEqual(b);
@@ -20,13 +22,30 @@ test('deepClone', () => {
   expect(deepClone(1)).toEqual(1);
 });
 
+test('deepAssign', () => {
+  const fn = () => {};
+
+  expect(deepAssign({}, { foo: null })).toEqual({});
+  expect(deepAssign({}, { foo: undefined })).toEqual({});
+  expect(deepAssign({ fn: null }, { fn })).toEqual({ fn });
+  expect(deepAssign({ foo: 0 }, { bar: 1 })).toEqual({ foo: 0, bar: 1 });
+  expect(deepAssign({ foo: { bar: false } }, { foo: { bar: true, foo: false } })).toEqual(
+    {
+      foo: {
+        bar: true,
+        foo: false
+      }
+    }
+  );
+});
+
 test('isDef', () => {
   expect(isDef(null)).toBeFalsy();
   expect(isDef(undefined)).toBeFalsy();
   expect(isDef(1)).toBeTruthy();
   expect(isDef('1')).toBeTruthy();
   expect(isDef({})).toBeTruthy();
-  expect(isDef(() => { })).toBeTruthy();
+  expect(isDef(() => {})).toBeTruthy();
 });
 
 test('camelize', () => {
@@ -54,7 +73,7 @@ test('raf', async () => {
 
   await later(50);
   expect(spy).toHaveBeenCalledTimes(1);
-  cancel(1);
+  cancelRaf(1);
 });
 
 test('is-email', () => {
@@ -74,19 +93,8 @@ test('is-mobile', () => {
 
 test('is-number', () => {
   expect(isNumber('1')).toBeTruthy();
+  expect(isNumber('1.2')).toBeTruthy();
+  expect(isNumber('1..2')).toBeFalsy();
   expect(isNumber('abc')).toBeFalsy();
   expect(isNumber('1b2')).toBeFalsy();
-});
-
-test('is-src', () => {
-  expect(isSrc('http://img.cdn.com')).toBeTruthy();
-  expect(isSrc('https://img.cdn.com')).toBeTruthy();
-  expect(isSrc('//img.cdn.com')).toBeTruthy();
-  expect(isSrc('data:image/jpeg;base64,/9j/4AAQSkZ')).toBeTruthy();
-  expect(isSrc('img.cdn.com')).toBeFalsy();
-  expect(isSrc('name')).toBeFalsy();
-  expect(isSrc('')).toBeFalsy();
-  expect(isSrc('blob:http://img.cdn.com')).toBeTruthy();
-  expect(isSrc('blob:https://img.cdn.com')).toBeTruthy();
-  expect(isSrc('xdata:image/jpeg;base64,/9j/4AAQSkZ')).toBeFalsy();
 });

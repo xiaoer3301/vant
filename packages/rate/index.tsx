@@ -1,7 +1,7 @@
 /* eslint-disable prefer-spread */
-import { use } from '../utils';
+import { use, suffixPx } from '../utils';
 import { emit, inherit } from '../utils/functional';
-import { preventDefault } from '../utils/event';
+import { preventDefault } from '../utils/dom/event';
 import Icon from '../icon';
 
 // Types
@@ -16,6 +16,7 @@ export type RateProps = {
   count: number;
   color: string;
   value: number;
+  gutter?: string | number;
   voidIcon: string;
   voidColor: string;
   readonly?: boolean;
@@ -49,8 +50,8 @@ function Rate(
 ) {
   const {
     icon,
-    size,
     color,
+    count,
     voidIcon,
     readonly,
     disabled,
@@ -59,7 +60,7 @@ function Rate(
   } = props;
 
   const list: RateStatus[] = [];
-  for (let i = 1; i <= props.count; i++) {
+  for (let i = 1; i <= count; i++) {
     list.push(getRateStatus(props.value, i, props.allowHalf));
   }
 
@@ -89,31 +90,49 @@ function Rate(
     }
   }
 
+  const gutter = suffixPx(props.gutter);
+
   function renderStar(status: RateStatus, index: number) {
     const isFull = status === 'full';
     const isVoid = status === 'void';
+    const score = index + 1;
+    const size = suffixPx(props.size);
+
+    let style;
+    if (gutter && score !== count) {
+      style = { paddingRight: gutter };
+    }
 
     return (
-      <div key={index} class={bem('item')}>
+      <div
+        key={index}
+        role="radio"
+        style={style}
+        tabindex="0"
+        aria-setsize={count}
+        aria-posinset={score}
+        aria-checked={String(!isVoid)}
+        class={bem('item')}
+      >
         <Icon
+          size={size}
           name={isFull ? icon : voidIcon}
-          size={`${size}px`}
           class={bem('icon')}
-          data-score={index + 1}
+          data-score={score}
           color={disabled ? disabledColor : isFull ? color : voidColor}
           onClick={() => {
-            onSelect(index + 1);
+            onSelect(score);
           }}
         />
         {props.allowHalf && (
           <Icon
+            size={size}
             name={isVoid ? voidIcon : icon}
-            size={`${size}px`}
             class={bem('icon', 'half')}
-            data-score={index + 0.5}
+            data-score={score - 0.5}
             color={disabled ? disabledColor : isVoid ? voidColor : color}
             onClick={() => {
-              onSelect(index + 0.5);
+              onSelect(score - 0.5);
             }}
           />
         )}
@@ -122,7 +141,13 @@ function Rate(
   }
 
   return (
-    <div class={bem()} {...inherit(ctx)} onTouchmove={onTouchMove}>
+    <div
+      class={bem()}
+      tabindex="0"
+      role="radiogroup"
+      {...inherit(ctx)}
+      onTouchmove={onTouchMove}
+    >
       {list.map((status, index) => renderStar(status, index))}
     </div>
   );
@@ -130,13 +155,11 @@ function Rate(
 
 Rate.props = {
   value: Number,
+  size: [String, Number],
+  gutter: [String, Number],
   readonly: Boolean,
   disabled: Boolean,
   allowHalf: Boolean,
-  size: {
-    type: Number,
-    default: 20
-  },
   icon: {
     type: String,
     default: 'star'

@@ -1,28 +1,29 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import VantDoc, { progress } from '@vant/doc';
+import VantDoc from '@vant/doc';
 import App from './DocsApp';
 import routes from './router';
-import { isMobile } from './utils';
+import { isMobile, importAll } from './utils';
+
+if (isMobile) {
+  location.replace('mobile.html' + location.hash);
+}
 
 Vue.use(VueRouter).use(VantDoc);
 
+const docs = {};
+const docsFromMarkdown = require.context('../markdown', false, /(en-US|zh-CN)\.md$/);
+const docsFromPackages = require.context('../../packages', true, /(en-US|zh-CN)\.md$/);
+
+importAll(docs, docsFromMarkdown);
+importAll(docs, docsFromPackages);
+
 const router = new VueRouter({
   mode: 'hash',
-  routes: routes()
-});
-
-router.beforeEach((route, redirect, next) => {
-  if (isMobile) {
-    location.replace('mobile.html' + location.hash);
-  }
-  progress.start();
-  document.title = route.meta.title || document.title;
-  next();
+  routes: routes({ componentMap: docs })
 });
 
 router.afterEach(() => {
-  progress.done();
   window.scrollTo(0, 0);
   Vue.nextTick(() => window.syncPath());
 });

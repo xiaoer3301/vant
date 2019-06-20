@@ -1,12 +1,25 @@
 import { use } from '../utils';
-import { stopPropagation } from '../utils/event';
+import { stopPropagation } from '../utils/dom/event';
+import { BindEventMixin } from '../mixins/bind-event';
 import Key from './Key';
 
 const [sfc, bem, t] = use('number-keyboard');
-const CLOSE_KEY_TYPE = ['blue', 'big'];
-const DELETE_KEY_TYPE = ['delete', 'big', 'gray'];
+const CLOSE_KEY_THEME = ['blue', 'big'];
+const DELETE_KEY_THEME = ['delete', 'big', 'gray'];
 
 export default sfc({
+  mixins: [
+    BindEventMixin(function (bind) {
+      if (this.hideOnClickOutside) {
+        bind(document.body, 'touchstart', this.onBlur);
+      }
+    })
+  ],
+
+  model: {
+    event: 'update:value'
+  },
+
   props: {
     show: Boolean,
     title: String,
@@ -17,9 +30,17 @@ export default sfc({
       type: String,
       default: 'default'
     },
+    value: {
+      type: String,
+      default: ''
+    },
     extraKey: {
       type: String,
       default: ''
+    },
+    maxlength: {
+      type: [Number, String],
+      default: Number.MAX_VALUE
     },
     zIndex: {
       type: Number,
@@ -37,22 +58,6 @@ export default sfc({
       type: Boolean,
       default: true
     }
-  },
-
-  mounted() {
-    this.handler(true);
-  },
-
-  destroyed() {
-    this.handler(false);
-  },
-
-  activated() {
-    this.handler(true);
-  },
-
-  deactivated() {
-    this.handler(false);
   },
 
   watch: {
@@ -73,13 +78,13 @@ export default sfc({
       switch (this.theme) {
         case 'default':
           keys.push(
-            { text: this.extraKey, type: ['gray'] },
+            { text: this.extraKey, theme: ['gray'] },
             { text: 0 },
-            { text: this.deleteText, type: ['gray', 'delete'] }
+            { text: this.deleteText, theme: ['gray'], type: 'delete' }
           );
           break;
         case 'custom':
-          keys.push({ text: 0, type: ['middle'] }, { text: this.extraKey });
+          keys.push({ text: 0, theme: ['middle'] }, { text: this.extraKey });
           break;
       }
 
@@ -92,18 +97,6 @@ export default sfc({
   },
 
   methods: {
-    handler(action) {
-      /* istanbul ignore if */
-      if (this.$isServer) {
-        return;
-      }
-
-      if (action !== this.handlerStatus && this.hideOnClickOutside) {
-        this.handlerStatus = action;
-        document.body[(action ? 'add' : 'remove') + 'EventListener']('touchstart', this.onBlur);
-      }
-    },
-
     onBlur() {
       this.$emit('blur');
     },
@@ -117,17 +110,21 @@ export default sfc({
       this.$emit(this.show ? 'show' : 'hide');
     },
 
-    onPress(text) {
+    onPress(text, type) {
       if (text === '') {
         return;
       }
 
-      if (text === this.deleteText) {
+      const { value } = this;
+
+      if (type === 'delete') {
         this.$emit('delete');
-      } else if (text === this.closeButtonText) {
+        this.$emit('update:value', value.slice(0, value.length - 1));
+      } else if (type === 'close') {
         this.onClose();
-      } else {
+      } else if (value.length < this.maxlength) {
         this.$emit('input', text);
+        this.$emit('update:value', value + text);
       }
     }
   },
@@ -139,6 +136,49 @@ export default sfc({
     const showTitleClose = closeButtonText && theme === 'default';
     const showTitle = title || showTitleClose || titleLeftSlot;
 
+    const Title = showTitle && (
+      <div class={[bem('title'), 'van-hairline--top']}>
+        {titleLeftSlot && <span class={bem('title-left')}>{titleLeftSlot}</span>}
+        {title && <span>{title}</span>}
+        {showTitleClose && (
+          <span role="button" tabindex="0" class={bem('close')} onClick={this.onClose}>
+            {closeButtonText}
+          </span>
+        )}
+      </div>
+    );
+
+    const Keys = this.keys.map(key => (
+      <Key
+        key={key.text}
+        text={key.text}
+        type={key.type}
+        theme={key.theme}
+        onPress={onPress}
+      >
+        {key.type === 'delete' && this.slots('delete')}
+      </Key>
+    ));
+
+    const Sidebar = theme === 'custom' && (
+      <div class={bem('sidebar')}>
+        <Key
+          text={this.deleteText}
+          type="delete"
+          theme={DELETE_KEY_THEME}
+          onPress={onPress}
+        >
+          {this.slots('delete')}
+        </Key>
+        <Key
+          text={closeButtonText}
+          type="close"
+          theme={CLOSE_KEY_THEME}
+          onPress={onPress}
+        />
+      </div>
+    );
+
     return (
       <transition name={this.transition ? 'van-slide-up' : ''}>
         <div
@@ -149,32 +189,9 @@ export default sfc({
           onAnimationend={this.onAnimationEnd}
           onWebkitAnimationEnd={this.onAnimationEnd}
         >
-          {showTitle && (
-            <div class={[bem('title'), 'van-hairline--top']}>
-              {titleLeftSlot && (
-                <span class={bem('title-left')}>
-                  {titleLeftSlot}
-                </span>
-              )}
-              {title && <span>{title}</span>}
-              {showTitleClose && (
-                <span class={bem('close')} onClick={this.onClose}>
-                  {closeButtonText}
-                </span>
-              )}
-            </div>
-          )}
-          <div class={bem('body')}>
-            {this.keys.map(key => (
-              <Key key={key.text} text={key.text} type={key.type} onPress={onPress} />
-            ))}
-          </div>
-          {theme === 'custom' && (
-            <div class={bem('sidebar')}>
-              <Key text={this.deleteText} type={DELETE_KEY_TYPE} onPress={onPress} />
-              <Key text={closeButtonText} type={CLOSE_KEY_TYPE} onPress={onPress} />
-            </div>
-          )}
+          {Title}
+          <div class={bem('body')}>{Keys}</div>
+          {Sidebar}
         </div>
       </transition>
     );

@@ -1,5 +1,6 @@
-import { use, range } from '../utils';
-import { preventDefault } from '../utils/event';
+import { use, isServer } from '../utils';
+import { range } from '../utils/format/number';
+import { preventDefault } from '../utils/dom/event';
 import { PopupMixin } from '../mixins/popup';
 import { TouchMixin } from '../mixins/touch';
 import Swipe from '../swipe';
@@ -26,6 +27,7 @@ export default sfc({
     asyncClose: Boolean,
     startPosition: Number,
     showIndicators: Boolean,
+    closeOnPopstate: Boolean,
     loop: {
       type: Boolean,
       default: true
@@ -57,6 +59,8 @@ export default sfc({
   },
 
   data() {
+    this.bindStatus = false;
+
     return {
       scale: 1,
       moveX: 0,
@@ -90,10 +94,30 @@ export default sfc({
 
     startPosition(active) {
       this.active = active;
+    },
+
+    closeOnPopstate: {
+      handler(val) {
+        this.handlePopstate(val);
+      },
+      immediate: true
     }
   },
 
   methods: {
+    handlePopstate(bind) {
+      /* istanbul ignore if */
+      if (isServer) {
+        return;
+      }
+
+      if (this.bindStatus !== bind) {
+        this.bindStatus = bind;
+        const action = bind ? 'add' : 'remove';
+        window[`${action}EventListener`]('popstate', this.close);
+      }
+    },
+
     onWrapperTouchStart() {
       this.touchStartTime = new Date();
     },

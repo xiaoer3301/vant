@@ -1,6 +1,6 @@
 import { use } from '../utils';
 import { TouchMixin } from '../mixins/touch';
-import { preventDefault } from '../utils/event';
+import { preventDefault } from '../utils/dom/event';
 
 const [sfc, bem] = use('slider');
 
@@ -28,33 +28,56 @@ export default sfc({
     }
   },
 
+  computed: {
+    range() {
+      return this.max - this.min;
+    }
+  },
+
   methods: {
     onTouchStart(event) {
-      if (this.disabled) return;
+      if (this.disabled) {
+        return;
+      }
 
       this.touchStart(event);
       this.startValue = this.format(this.value);
+      this.dragStatus = 'start';
     },
 
     onTouchMove(event) {
+      if (this.disabled) {
+        return;
+      }
+
+      if (this.dragStatus === 'start') {
+        this.$emit('drag-start');
+      }
+
       preventDefault(event, true);
-
-      if (this.disabled) return;
-
       this.touchMove(event);
+      this.dragStatus = 'draging';
 
       const rect = this.$el.getBoundingClientRect();
       const delta = this.vertical ? this.deltaY : this.deltaX;
       const total = this.vertical ? rect.height : rect.width;
-      const diff = (delta / total) * 100;
+      const diff = (delta / total) * this.range;
 
       this.newValue = this.startValue + diff;
       this.updateValue(this.newValue);
     },
 
     onTouchEnd() {
-      if (this.disabled) return;
-      this.updateValue(this.newValue, true);
+      if (this.disabled) {
+        return;
+      }
+
+      if (this.dragStatus === 'draging') {
+        this.updateValue(this.newValue, true);
+        this.$emit('drag-end');
+      }
+
+      this.dragStatus = '';
     },
 
     onClick(event) {
@@ -65,7 +88,7 @@ export default sfc({
       const rect = this.$el.getBoundingClientRect();
       const delta = this.vertical ? event.clientY - rect.top : event.clientX - rect.left;
       const total = this.vertical ? rect.height : rect.width;
-      const value = (delta / total) * 100;
+      const value = (delta / total) * this.range + this.min;
 
       this.updateValue(value, true);
     },
@@ -96,7 +119,7 @@ export default sfc({
     const crossAxis = vertical ? 'width' : 'height';
 
     const barStyle = {
-      [mainAxis]: `${this.format(this.value)}%`,
+      [mainAxis]: `${((this.value - this.min) * 100) / this.range}%`,
       [crossAxis]: this.barHeight,
       background: this.activeColor
     };
@@ -109,6 +132,12 @@ export default sfc({
       >
         <div class={bem('bar')} style={barStyle}>
           <div
+            role="slider"
+            tabindex={this.disabled ? -1 : 0}
+            aria-valuemin={this.min}
+            aria-valuenow={this.value}
+            aria-valuemax={this.max}
+            aria-orientation={this.vertical ? 'vertical' : 'horizontal'}
             class={bem('button-wrapper')}
             onTouchstart={this.onTouchStart}
             onTouchmove={this.onTouchMove}

@@ -7,7 +7,7 @@ import VueRouter from 'vue-router';
 import VantDoc, { DemoBlock, DemoSection } from '@vant/doc';
 import i18n from './utils/i18n';
 import Vant, { Lazyload, Locale } from '../../packages';
-import { camelize } from '../../packages/utils';
+import { camelize } from '../../packages/utils/format/string';
 
 Vue
   .use(Vant)
@@ -80,22 +80,20 @@ Locale.add({
   }
 });
 
-export function wrapper(promise, name) {
-  return promise.then(component => {
-    component = component.default;
-    name = 'demo-' + name;
-    component.name = name;
+export function demoWrapper(module, name) {
+  const component = module.default;
+  name = 'demo-' + name;
+  component.name = name;
 
-    const { i18n: config } = component;
-    if (config) {
-      const formattedI18n = {};
-      const camelizedName = camelize(name);
-      Object.keys(config).forEach(key => {
-        formattedI18n[key] = { [camelizedName]: config[key] };
-      });
-      Locale.add(formattedI18n);
-    }
+  const { i18n: config } = component;
+  if (config) {
+    const formattedI18n = {};
+    const camelizedName = camelize(name);
+    Object.keys(config).forEach(key => {
+      formattedI18n[key] = { [camelizedName]: config[key] };
+    });
+    Locale.add(formattedI18n);
+  }
 
-    return component;
-  });
+  return component;
 }

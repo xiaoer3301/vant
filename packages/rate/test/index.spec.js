@@ -88,3 +88,23 @@ test('touchmove', () => {
   expect(onChange).toHaveBeenNthCalledWith(2, 3);
   expect(onChange).toHaveBeenNthCalledWith(3, 4);
 });
+
+test('gutter prop', () => {
+  const wrapper = mount(Rate, {
+    propsData: {
+      gutter: 10
+    }
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});
+
+test('size prop', () => {
+  const wrapper = mount(Rate, {
+    propsData: {
+      size: '2rem'
+    }
+  });
+
+  expect(wrapper).toMatchSnapshot();
+});

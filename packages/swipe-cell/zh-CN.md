@@ -13,24 +13,48 @@ Vue.use(SwipeCell);
 ### 基础用法
 
 ```html
-<van-swipe-cell :right-width="65" :left-width="65">
-  <span slot="left">选择</span>
-  <van-cell-group>
-    <van-cell title="单元格" value="内容" />
-  </van-cell-group>
-  <span slot="right">删除</span>
+<van-swipe-cell :right-width="60" :left-width="60">
+  <van-button
+    square
+    slot="left"
+    type="danger"
+    text="选择"
+  />
+  <van-cell
+    :border="false"
+    title="单元格"
+    value="内容"
+  />
+  <van-button
+    square
+    slot="right"
+    type="danger"
+    text="删除"
+  />
 </van-swipe-cell>
 ```
 
 ### 异步关闭
 
 ```html
-<van-swipe-cell :right-width="65" :left-width="65" :on-close="onClose">
-  <span slot="left">选择</span>
-  <van-cell-group>
-    <van-cell title="单元格" value="内容" />
-  </van-cell-group>
-  <span slot="right">删除</span>
+<van-swipe-cell :right-width="60" :left-width="60" :on-close="onClose">
+  <van-button
+    square
+    slot="left"
+    type="danger"
+    text="选择"
+  />
+  <van-cell
+    :border="false"
+    title="单元格"
+    value="内容"
+  />
+  <van-button
+    square
+    slot="right"
+    type="danger"
+    text="删除"
+  />
 </van-swipe-cell>
 ```
 
@@ -63,10 +87,10 @@ export default {
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|------|------|
-| left-width | 左侧滑动区域宽度 | `Number` | `0` | - |
-| right-width | 右侧滑动区域宽度 | `Number` | `0` | - |
 | on-close | 关闭时的回调函数 | `Function` | - | - |
 | disabled | 是否禁用滑动 | `Boolean` | `false` | 1.3.4 |
+| left-width | 指定左侧滑动区域宽度 | `Number` | `auto` | - |
+| right-width | 指定右侧滑动区域宽度 | `Number` | `auto` | - |
 
 ### Slots
 

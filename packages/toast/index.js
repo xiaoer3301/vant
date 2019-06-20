@@ -1,14 +1,16 @@
 import Vue from 'vue';
 import VueToast from './Toast';
-import { isObj, isServer, isInDocument } from '../utils';
+import { isObj, isServer } from '../utils';
 
 const defaultOptions = {
+  icon: '',
   type: 'text',
   mask: false,
   value: true,
   message: '',
   className: '',
   onClose: null,
+  onOpened: null,
   duration: 3000,
   position: 'middle',
   forbidClick: false,
@@ -16,11 +18,20 @@ const defaultOptions = {
   getContainer: 'body',
   overlayStyle: null
 };
-const parseOptions = message => (isObj(message) ? message : { message });
 
 let queue = [];
 let multiple = false;
-let currentOptions = { ...defaultOptions };
+let currentOptions = {
+  ...defaultOptions
+};
+
+function parseOptions(message) {
+  if (isObj(message)) {
+    return message;
+  }
+
+  return { message };
+}
 
 function createInstance() {
   /* istanbul ignore if */
@@ -28,7 +39,7 @@ function createInstance() {
     return {};
   }
 
-  if (!queue.length || multiple || !isInDocument(queue[0].$el)) {
+  if (!queue.length || multiple) {
     const toast = new (Vue.extend(VueToast))({
       el: document.createElement('div')
     });
@@ -39,7 +50,7 @@ function createInstance() {
 }
 
 // transform toast options to popup props
-function transformer(options) {
+function transformOptions(options) {
   options.overlay = options.mask;
   return options;
 }
@@ -63,20 +74,22 @@ function Toast(options = {}) {
       }
 
       if (multiple && !isServer) {
-        clearTimeout(toast.timer);
-        queue = queue.filter(item => item !== toast);
+        toast.$on('closed', () => {
+          clearTimeout(toast.timer);
+          queue = queue.filter(item => item !== toast);
 
-        const parent = toast.$el.parentNode;
-        if (parent) {
-          parent.removeChild(toast.$el);
-        }
+          const parent = toast.$el.parentNode;
+          if (parent) {
+            parent.removeChild(toast.$el);
+          }
 
-        toast.$destroy();
+          toast.$destroy();
+        });
       }
     }
   };
 
-  Object.assign(toast, transformer(options));
+  Object.assign(toast, transformOptions(options));
   clearTimeout(toast.timer);
 
   if (options.duration > 0) {
@@ -88,9 +101,11 @@ function Toast(options = {}) {
   return toast;
 }
 
-const createMethod = type => options => Toast({
-  type, ...parseOptions(options)
-});
+const createMethod = type => options =>
+  Toast({
+    type,
+    ...parseOptions(options)
+  });
 
 ['loading', 'success', 'fail'].forEach(method => {
   Toast[method] = createMethod(method);

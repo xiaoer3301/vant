@@ -31,16 +31,18 @@ function Switch(
     inactiveValue
   } = props;
 
+  const checked = value === activeValue;
+
   const switchStyle = {
     fontSize: size,
-    backgroundColor: value ? activeColor : inactiveColor
+    backgroundColor: checked ? activeColor : inactiveColor
   };
 
-  const loadingColor = value ? activeColor || BLUE : inactiveColor || GRAY_DARK;
+  const loadingColor = checked ? activeColor || BLUE : inactiveColor || GRAY_DARK;
 
   function onClick() {
     if (!disabled && !loading) {
-      const newValue = value === activeValue ? inactiveValue : activeValue;
+      const newValue = checked ? inactiveValue : activeValue;
       emit(ctx, 'input', newValue);
       emit(ctx, 'change', newValue);
     }
@@ -49,10 +51,12 @@ function Switch(
   return (
     <div
       class={bem({
-        on: value === activeValue,
+        on: checked,
         disabled
       })}
+      role="switch"
       style={switchStyle}
+      aria-checked={String(checked)}
       onClick={onClick}
       {...inherit(ctx)}
     >

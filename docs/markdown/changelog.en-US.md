@@ -1,12 +1,32 @@
-# Changelog
+# 更新日志
 
-### [v2.0.0-beta.0](https://github.com/youzan/vant/tree/v2.0.0-beta.0)
-`2019-05-21`
+## [v2.0.1](https://github.com/youzan/vant/tree/v2.0.1)
+`2019-06-15`
+
+**Improvements**
+
+- Tab: support string type of line-width & line-height [\#3514](https://github.com/youzan/vant/pull/3514)
+- Icon: use image component to display image [\#3515](https://github.com/youzan/vant/pull/3515)
+- Toast: add icon prop [\#3485](https://github.com/youzan/vant/pull/3485)
+- DropdownMenu: add direction prop [\#3490](https://github.com/youzan/vant/pull/3490)
+- NumberKeyboard: add delete slot [\#3499](https://github.com/youzan/vant/pull/3499)
+
+**Bug Fixes**
+
+- fix Image missing type definition [\#3520](https://github.com/youzan/vant/pull/3520)
+- fix SwitchCell incorrect loading position [\#3501](https://github.com/youzan/vant/pull/3501)
+- fix Toast missing fade-out transition in multiple mode [\#3504](https://github.com/youzan/vant/pull/3504)
+- fix Locale can not modify functional message [\#3498](https://github.com/youzan/vant/pull/3498)
+
+
+### [v2.0.0](https://github.com/youzan/vant/tree/v2.0.0)
+`2019-06-12`
 
 #### Overview
 
 - Add four new components
 - Add dozens of APIs
+- Improve accessibility
 - New card style document, support document search
 - All components support custom styles via `less` variables
 - Rename several components, deprecate several APIs
@@ -17,6 +37,8 @@
 - `Skeleton` Component
 - `IndexBar`、`IndexAnchor` Component
 - `DropdownMenu`、`DropdownItem` Component
+
+![](https://img.yzcdn.cn/public_files/2019/06/10/141ac9b67c06be0811c86c4c1c571c9d.png)
 
 #### Breaking Changes
 
@@ -52,7 +74,7 @@
 ##### Badge
 
 - Rename `BadgeGroup` to `Sidebar`
-- Rename `Badge` to `SlideBarItem`
+- Rename `Badge` to `SlidebarItem`
 
 ##### Loading
 
@@ -71,71 +93,144 @@
 
 - Remove Waterfall component，please use `List` instead，or use [@vant/waterfall](https://github.com/chenjiahan/vant-waterfall)。
 
-#### New Features
+---
+
+#### Accessibility
+
+Improve accessibility for those components：
+
+- Accordion
+- Checkbox
+- Dialog
+- DropdownMenu
+- GoodsAction
+- List
+- NoticeBar
+- NumberKeyboard
+- Radio
+- Rate
+- Stepper
+- Tab
+- Slider
+- Switch
+
+#### New Feature
 
 ##### ActionSheet
 
-- add `close-on-click-action` prop
-- support use `title` and `actions` prop at same time
+- Add `lock-scroll` prop
+- Add `click-overlay` event
+- Add `close-on-click-action` prop
+- Support both use `title` and `actions` prop
+
+##### Area
+
+- `reset` method support `code` param
 
 ##### Button
 
-- add `loading-type` prop
+- Add `icon` prop
+- Add `loading-type` prop
 
 ##### Checkbox
 
-- add `icon-size` prop
+- Add `icon-size` prop
+
+##### DatetimePicker
+
+- Add `filter` prop
 
 ##### Field
 
-- add `label-class` prop
+- Add `input` slot
+- Add `click` event
+- Add `clickable` prop
+- Add `label-class` prop
+- No longer update v-model during IME composition
 
 ##### GoodsActionButton
 
-- add `type` prop
+- Add `type` prop
 
 ##### Icon
 
-- Support `size` prop of `Number` type
+- Support `Number` type of `size` prop
+
+##### ImagePreview
+
+- Add `close-on-popstate` prop
 
 ##### Loading
 
-- add `default` slot
-- add `vertical` prop
-- add `text-size` prop
-- Support `size` prop of `Number` type
+- Add `default` slot
+- Add `vertical` prop
+- Add `text-size` prop
+- Support `Number` type of `size` prop
 
 ##### Notify
 
-- add `onClick` prop
+- Add `onClick` option
+- Add `onClose` option
+- Add `onOpened` option
 
 ##### NoticeBar
 
-- add `left-icon` slot
-- add `right-icon` slot
+- Add `left-icon` slot
+- Add `right-icon` slot
 
 ##### PasswordInput
 
-- add `gutter` prop
+- Add `gutter` prop
+
+##### Picker
+
+- Support inertial scrolling
+- Add `toolbar-position` prop
 
 ##### Popup
 
-- add `click` event
-- add `duration` prop
+- Add `click` event
+- Add `duration` prop
 
 ##### Radio
 
-- add `icon-size` prop
+- Add `icon-size` prop
+
+##### Rate
+
+- Add `gutter` prop
+- Support`String` type of `size` prop
+
+##### Search
+
+- Add `clearable` prop
+- Add `left-icon` prop
+- Add `right-icon` prop
+- Add `right-icon` slot
+- No longer update v-model during IME composition
+
+##### Slider
+
+- Add `drag-start` event
+- Add `drag-end` event
 
 ##### Steps
 
-- add `inactive-icon` prop
-- add `inactive-icon` slot
+- Add `inactive-icon` prop
+- Add `inactive-icon` slot
+
+##### Stepper
+
+- Support`Number` type of `input-width` prop
 
 ##### SubmitBar
 
-- add `tip-icon` prop
-- add `suffix-label` prop
+- Add `tip-icon` prop
+- Add `suffix-label` prop
+
+##### SwipeCell
+
+- Auto calc `left-width` and `right-width`
 
 ##### Switch
 
@@ -143,25 +238,41 @@
 
 ##### SwitchCell
 
-- add `border` prop
-- add `cell-size` prop
+- Add `border` prop
+- Add `cell-size` prop
 
 ##### Sku
 
-- add `preview-open` event
-- add `preview-close` event
+- Add `preview-open` event
+- Add `preview-close` event
 
 ##### Tab
 
-- Optimize `animated` performance
+- Add `border` prop
+- Optimize `animated` animation performance
 - Fix incorrect tab pane height when use `animated` prop
 
 ##### Tabbar
 
-- add `route` prop
-- add `border` prop
-- add `inactive-color` prop
+- Add `route` prop
+- Add `border` prop
+- Add `inactive-color` prop
 
 ##### TabbarItem
 
-- add `name` prop
+- Add `name` prop
+
+##### Toast
+
+- Add `onOpened` option
+
+##### Uploader
+
+- Add default upload style
+- Add `delete` event
+- Add `upload-text` prop
+- Add `max-count` prop
+- Add `preview-size` prop
+- Add `preview-image` prop
+- Support use `v-model` to bind file-list
+- `oversize` event add `detail` param

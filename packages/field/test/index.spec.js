@@ -10,6 +10,13 @@ test('input event', () => {
   expect(wrapper.emitted('input')[0][0]).toEqual('1');
 });
 
+test('click event', () => {
+  const wrapper = mount(Field);
+
+  wrapper.trigger('click');
+  expect(wrapper.emitted('click')[0][0]).toBeTruthy();
+});
+
 test('click icon event', () => {
   const wrapper = mount(Field, {
     propsData: {
@@ -158,6 +165,21 @@ test('clearable', () => {
   wrapper.find('.van-field__clear').trigger('touchstart');
   expect(wrapper.emitted('input')[0][0]).toEqual('');
   expect(wrapper.emitted('clear')).toBeTruthy();
+});
+
+test('render input slot', () => {
+  const wrapper = mount({
+    template: `
+      <field>
+        <template v-slot:input>Custom Input</template>
+      </field>
+    `,
+    components: {
+      Field
+    }
+  });
+
+  expect(wrapper).toMatchSnapshot();
 });
 
 test('render label slot', () => {

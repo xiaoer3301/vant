@@ -1,9 +1,10 @@
 import Icon from '../icon';
 import Cell from '../cell';
 import { cellProps } from '../cell/shared';
-import { preventDefault } from '../utils/event';
-import { getRootScrollTop } from '../utils/scroll';
-import { use, isObj, isDef, isIOS, suffixPx } from '../utils';
+import { preventDefault } from '../utils/dom/event';
+import { getRootScrollTop } from '../utils/dom/scroll';
+import { use, isObj, isDef, suffixPx } from '../utils';
+import { isIOS } from '../utils/validate/system';
 
 const [sfc, bem] = use('field');
 
@@ -50,18 +51,26 @@ export default sfc({
   computed: {
     showClear() {
       return (
-        this.clearable && this.focused && this.value !== '' && isDef(this.value) && !this.readonly
+        this.clearable &&
+        this.focused &&
+        this.value !== '' &&
+        isDef(this.value) &&
+        !this.readonly
       );
     },
 
     listeners() {
-      return {
+      const listeners = {
         ...this.$listeners,
         input: this.onInput,
         keypress: this.onKeypress,
         focus: this.onFocus,
         blur: this.onBlur
       };
+
+      delete listeners.click;
+
+      return listeners;
     },
 
     labelStyle() {
@@ -74,15 +83,23 @@ export default sfc({
 
   methods: {
     focus() {
-      this.$refs.input && this.$refs.input.focus();
+      if (this.$refs.input) {
+        this.$refs.input.focus();
+      }
     },
 
     blur() {
-      this.$refs.input && this.$refs.input.blur();
+      if (this.$refs.input) {
+        this.$refs.input.blur();
+      }
     },
 
     // native maxlength not work when type = number
     format(target = this.$refs.input) {
+      if (!target) {
+        return;
+      }
+
       let { value } = target;
       const { maxlength } = this.$attrs;
 
@@ -95,6 +112,11 @@ export default sfc({
     },
 
     onInput(event) {
+      // not update v-model when composing
+      if (event.target.composing) {
+        return;
+      }
+
       this.$emit('input', this.format(event.target));
     },
 
@@ -121,6 +143,10 @@ export default sfc({
       }
     },
 
+    onClick(event) {
+      this.$emit('click', event);
+    },
+
     onClickLeftIcon() {
       this.$emit('click-left-icon');
     },
@@ -140,7 +166,9 @@ export default sfc({
         const { keyCode } = event;
         const allowPoint = String(this.value).indexOf('.') === -1;
         const isValidKey =
-          (keyCode >= 48 && keyCode <= 57) || (keyCode === 46 && allowPoint) || keyCode === 45;
+          (keyCode >= 48 && keyCode <= 57) ||
+          (keyCode === 46 && allowPoint) ||
+          keyCode === 45;
 
         if (!isValidKey) {
           preventDefault(event);
@@ -181,6 +209,16 @@ export default sfc({
     },
 
     renderInput() {
+      const inputSlot = this.slots('input');
+
+      if (inputSlot) {
+        return (
+          <div class={bem('control', this.inputAlign)}>
+            {inputSlot}
+          </div>
+        );
+      }
+
       const inputProps = {
         ref: 'input',
         class: bem('control', this.inputAlign),
@@ -191,7 +229,14 @@ export default sfc({
           ...this.$attrs,
           readonly: this.readonly
         },
-        on: this.listeners
+        on: this.listeners,
+        // add model directive to skip IME composition
+        directives: [
+          {
+            name: 'model',
+            value: this.value
+          }
+        ]
       };
 
       if (this.type === 'textarea') {
@@ -244,6 +289,7 @@ export default sfc({
         border={this.border}
         isLink={this.isLink}
         required={this.required}
+        clickable={this.clickable}
         titleStyle={this.labelStyle}
         titleClass={[bem('label', labelAlign), this.labelClass]}
         class={bem({
@@ -253,14 +299,21 @@ export default sfc({
           'min-height': this.type === 'textarea' && !this.autosize
         })}
         scopedSlots={scopedSlots}
+        onClick={this.onClick}
       >
         <div class={bem('body')}>
           {this.renderInput()}
-          {this.showClear && <Icon name="clear" class={bem('clear')} onTouchstart={this.onClear} />}
+          {this.showClear && (
+            <Icon name="clear" class={bem('clear')} onTouchstart={this.onClear} />
+          )}
           {this.renderRightIcon()}
           {slots('button') && <div class={bem('button')}>{slots('button')}</div>}
         </div>
-        {this.errorMessage && <div class={bem('error-message', this.errorMessageAlign)}>{this.errorMessage}</div>}
+        {this.errorMessage && (
+          <div class={bem('error-message', this.errorMessageAlign)}>
+            {this.errorMessage}
+          </div>
+        )}
       </Cell>
     );
   }

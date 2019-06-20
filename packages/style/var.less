@@ -243,9 +243,12 @@
 
 // IndexAnchor
 @index-anchor-padding: 0 15px;
+@index-anchor-text-color: @text-color;
 @index-anchor-font-weight: 500;
 @index-anchor-font-size: 14px;
 @index-anchor-line-height: 32px;
+@index-anchor-background-color: transparent;
+@index-anchor-sticky-background-color: @white;
 
 // IndexBar
 @index-bar-index-font-size: 10px;
@@ -394,7 +397,8 @@
 @radio-disabled-background-color: @border-color;
 
 // Rate
-@rate-horizontal-padding: 2px;
+@rate-icon-size: 20px;
+@rate-icon-gutter: 4px;
 
 // Search
 @search-padding: 10px 16px;
@@ -548,7 +552,7 @@
 @toast-line-height: 20px;
 @toast-border-radius: 4px;
 @toast-background-color: rgba(@text-color, .88);
-@toast-icon-size: 48px;
+@toast-icon-size: 40px;
 @toast-text-min-width: 96px;
 @toast-text-padding: 8px 12px;
 @toast-default-padding: 15px;
@@ -568,3 +572,14 @@
 @tree-select-item-height: 44px;
 @tree-select-item-active-color: @red;
 @tree-select-item-disabled-color: @gray;
+
+// Uploader
+@uploader-size: 80px;
+@uploader-icon-size: 24px;
+@uploader-icon-color: @gray-dark;
+@uploader-text-color: @gray-dark;
+@uploader-text-font-size: 12px;
+@uploader-upload-border-color: @gray-light;
+@uploader-upload-background-color: @white;
+@uploader-delete-color: @white;
+@uploader-delete-background-color: rgba(0, 0, 0, .45);

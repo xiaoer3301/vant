@@ -1,6 +1,6 @@
 import { use } from '../utils';
 import { inherit, emit } from '../utils/functional';
-import { preventDefault } from '../utils/event';
+import { preventDefault } from '../utils/dom/event';
 import Field from '../field';
 
 // Types
@@ -13,6 +13,9 @@ export type SearchProps = {
   shape: string;
   value?: string;
   label?: string;
+  leftIcon: string;
+  rightIcon?: string;
+  clearable: boolean;
   background: string;
   showAction?: boolean;
 };
@@ -21,6 +24,7 @@ export type SearchSlots = DefaultSlots & {
   label?: ScopedSlot;
   action?: ScopedSlot;
   'left-icon'?: ScopedSlot;
+  'right-icon'?: ScopedSlot;
 };
 
 export type SearchEvents = {
@@ -89,12 +93,16 @@ function Search(
       <div class={bem('content', props.shape)}>
         {Label()}
         <Field
-          clearable
           type="search"
-          value={props.value}
           border={false}
-          leftIcon="search"
-          scopedSlots={{ 'left-icon': slots['left-icon'] }}
+          value={props.value}
+          leftIcon={props.leftIcon}
+          rightIcon={props.rightIcon}
+          clearable={props.clearable}
+          scopedSlots={{
+            'left-icon': slots['left-icon'],
+            'right-icon': slots['right-icon']
+          }}
           {...fieldData}
         />
       </div>
@@ -106,14 +114,23 @@ function Search(
 Search.props = {
   value: String,
   label: String,
+  rightIcon: String,
   showAction: Boolean,
   shape: {
     type: String,
     default: 'square'
   },
+  clearable: {
+    type: Boolean,
+    default: true
+  },
   background: {
     type: String,
     default: '#fff'
+  },
+  leftIcon: {
+    type: String,
+    default: 'search'
   }
 };
 

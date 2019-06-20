@@ -35,7 +35,7 @@ export default {
 ### Range
 
 ```html
-<van-slider v-model="value" :min="10" :max="90" />
+<van-slider v-model="value" :min="-50" :max="50" />
 ```
 
 ### Disabled
@@ -105,6 +105,8 @@ export default {
 | Event | Description | Arguments |
 |------|------|------|
 | change | Triggered after value change | value: current rate |
+| drag-start | Triggered when start drag | - |
+| drag-end | Triggered when end drag | - |
 
 ### Slots
 

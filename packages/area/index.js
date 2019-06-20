@@ -54,6 +54,12 @@ export default sfc({
       handler() {
         this.setValues();
       }
+    },
+
+    columnsNum() {
+      this.$nextTick(() => {
+        this.setValues();
+      });
     }
   },
 
@@ -171,8 +177,8 @@ export default sfc({
       return area;
     },
 
-    reset() {
-      this.code = '';
+    reset(code) {
+      this.code = code || '';
       this.setValues();
     }
   },

@@ -1,5 +1,6 @@
-import { use, range } from '../utils';
-import { preventDefault } from '../utils/event';
+import { use } from '../utils';
+import { range } from '../utils/format/number';
+import { preventDefault } from '../utils/dom/event';
 import { TouchMixin } from '../mixins/touch';
 import { ClickOutsideMixin } from '../mixins/click-outside';
 
@@ -7,10 +8,13 @@ const [sfc, bem] = use('swipe-cell');
 const THRESHOLD = 0.15;
 
 export default sfc({
-  mixins: [TouchMixin, ClickOutsideMixin({
-    event: 'touchstart',
-    method: 'onClick'
-  })],
+  mixins: [
+    TouchMixin,
+    ClickOutsideMixin({
+      event: 'touchstart',
+      method: 'onClick'
+    })
+  ],
 
   props: {
     onClose: Function,
@@ -26,9 +30,28 @@ export default sfc({
     };
   },
 
+  computed: {
+    computedLeftWidth() {
+      return this.leftWidth || this.getWidthByRef('left');
+    },
+
+    computedRightWidth() {
+      return this.rightWidth || this.getWidthByRef('right');
+    }
+  },
+
   methods: {
+    getWidthByRef(ref) {
+      if (this.$refs[ref]) {
+        const rect = this.$refs[ref].getBoundingClientRect();
+        return rect.width;
+      }
+
+      return 0;
+    },
+
     open(position) {
-      const offset = position === 'left' ? this.leftWidth : -this.rightWidth;
+      const offset = position === 'left' ? this.computedLeftWidth : -this.computedRightWidth;
       this.swipeMove(offset);
       this.resetSwipeStatus();
     },
@@ -43,7 +66,8 @@ export default sfc({
     },
 
     swipeMove(offset = 0) {
-      this.offset = range(offset, -this.rightWidth, this.leftWidth);
+      this.offset = range(offset, -this.computedRightWidth, this.computedLeftWidth);
+
       if (this.offset) {
         this.swiping = true;
       } else {
@@ -52,14 +76,22 @@ export default sfc({
     },
 
     swipeLeaveTransition(direction) {
-      const { offset, leftWidth, rightWidth } = this;
+      const { offset, computedLeftWidth, computedRightWidth } = this;
       const threshold = this.opened ? 1 - THRESHOLD : THRESHOLD;
 
       // right
-      if (direction === 'right' && -offset > rightWidth * threshold && rightWidth > 0) {
+      if (
+        direction === 'right' &&
+        -offset > computedRightWidth * threshold &&
+        computedRightWidth > 0
+      ) {
         this.open('right');
         // left
-      } else if (direction === 'left' && offset > leftWidth * threshold && leftWidth > 0) {
+      } else if (
+        direction === 'left' &&
+        offset > computedLeftWidth * threshold &&
+        computedLeftWidth > 0
+      ) {
         this.open('left');
         // reset
       } else {
@@ -145,17 +177,17 @@ export default sfc({
             this.swiping = false;
           }}
         >
-          {this.leftWidth ? (
-            <div class={bem('left')} onClick={onClick('left', true)}>
+          {this.slots('left') && (
+            <div ref="left" class={bem('left')} onClick={onClick('left', true)}>
               {this.slots('left')}
             </div>
-          ) : null}
+          )}
           {this.slots()}
-          {this.rightWidth ? (
-            <div class={bem('right')} onClick={onClick('right', true)}>
+          {this.slots('right') && (
+            <div ref="right" class={bem('right')} onClick={onClick('right', true)}>
               {this.slots('right')}
             </div>
-          ) : null}
+          )}
         </div>
       </div>
     );

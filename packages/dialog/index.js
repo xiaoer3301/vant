@@ -1,8 +1,12 @@
 import Vue from 'vue';
 import VanDialog from './Dialog';
-import { isServer, isInDocument } from '../utils';
+import { isServer } from '../utils';
 
 let instance;
+
+function isInDocument(element) {
+  return document.body.contains(element);
+}
 
 function initInstance() {
   if (instance) {
@@ -88,6 +92,8 @@ Dialog.resetDefaultOptions();
 Dialog.install = () => {
   Vue.use(VanDialog);
 };
+
+Dialog.Component = VanDialog;
 
 Vue.prototype.$dialog = Dialog;
 

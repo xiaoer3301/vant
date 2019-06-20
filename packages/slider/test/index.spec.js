@@ -1,17 +1,17 @@
 import Slider from '..';
-import { mount, triggerDrag, trigger } from '../../../test/utils';
+import { mount, trigger, triggerDrag, mockGetBoundingClientRect } from '../../../test/utils';
 
-function mockGetBoundingClientRect(vertical) {
-  Element.prototype.getBoundingClientRect = jest.fn(() => ({
+function mockRect(vertical) {
+  return mockGetBoundingClientRect({
     width: vertical ? 0 : 100,
     height: vertical ? 100 : 0,
     top: vertical ? 0 : 100,
     left: vertical ? 100 : 0
-  }));
+  });
 }
 
 test('drag button', () => {
-  mockGetBoundingClientRect();
+  const restoreMock = mockRect();
 
   const wrapper = mount(Slider, {
     propsData: {
@@ -27,14 +27,22 @@ test('drag button', () => {
   const button = wrapper.find('.van-slider__button');
   triggerDrag(button, 50, 0);
   expect(wrapper).toMatchSnapshot();
+  expect(wrapper.emitted('drag-start')).toBeFalsy();
+  expect(wrapper.emitted('drag-end')).toBeFalsy();
 
   wrapper.setData({ disabled: false });
+  trigger(button, 'touchstart', 0, 0);
+  trigger(button, 'touchend', 0, 0);
   triggerDrag(button, 50, 0);
   expect(wrapper).toMatchSnapshot();
+  expect(wrapper.emitted('drag-start')).toBeTruthy();
+  expect(wrapper.emitted('drag-end')).toBeTruthy();
+
+  restoreMock();
 });
 
 it('click bar', () => {
-  mockGetBoundingClientRect();
+  const restoreMock = mockRect();
 
   const wrapper = mount(Slider, {
     propsData: {
@@ -53,10 +61,12 @@ it('click bar', () => {
   wrapper.setData({ disabled: false });
   trigger(wrapper, 'click', 100, 0);
   expect(wrapper).toMatchSnapshot();
+
+  restoreMock();
 });
 
 test('drag button vertical', () => {
-  mockGetBoundingClientRect(true);
+  const restoreMock = mockRect(true);
 
   const wrapper = mount(Slider, {
     propsData: {
@@ -72,10 +82,12 @@ test('drag button vertical', () => {
   const button = wrapper.find('.van-slider__button');
   triggerDrag(button, 0, 50);
   expect(wrapper).toMatchSnapshot();
+
+  restoreMock();
 });
 
 it('click vertical', () => {
-  mockGetBoundingClientRect(true);
+  const restoreMock = mockRect(true);
 
   const wrapper = mount(Slider, {
     propsData: {
@@ -90,4 +102,6 @@ it('click vertical', () => {
 
   trigger(wrapper, 'click', 0, 100);
   expect(wrapper).toMatchSnapshot();
+
+  restoreMock();
 });

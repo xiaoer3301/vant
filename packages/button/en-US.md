@@ -45,12 +45,8 @@ Vue.use(Button);
 
 ```html 
 <van-button loading type="primary" />
-<van-button
-  loading
-  type="danger"
-  loading-type="spinner"
-  loading-text="Loading..."
-/>
+<van-button loading type="primary" loading-type="spinner" />
+<van-button loading type="danger" loading-text="Loading..." />
 ```
 
 ### Shape
@@ -58,6 +54,14 @@ Vue.use(Button);
 ```html 
 <van-button square type="primary">Square</van-button>
 <van-button round type="danger">Round</van-button>
+```
+
+### Icon
+
+```html 
+<van-button icon="star-o" type="primary" />
+<van-button icon="star-o" type="primary">Button</van-button>
+<van-button icon="https://img.yzcdn.cn/vant/logo.png" type="danger">Button</van-button>
 ```
 
 ### Size
@@ -78,6 +82,7 @@ Vue.use(Button);
 | type | Can be set to `primary` `info` `warning` `danger` | `String` | `default` |
 | size | Can be set to `large` `small` `mini` | `String` | `normal` |
 | text | Text | `String` | - |
+| icon | Left Icon | `String` | - |
 | tag | HTML Tag | `String` | `button` |
 | native-type | Native Type Attribute | `String` | `''` |
 | plain | Whether to be plain button | `Boolean` | `false` |

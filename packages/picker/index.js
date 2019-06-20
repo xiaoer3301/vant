@@ -1,5 +1,5 @@
 import { use } from '../utils';
-import { preventDefault } from '../utils/event';
+import { preventDefault } from '../utils/dom/event';
 import { deepClone } from '../utils/deep-clone';
 import { pickerProps } from './shared';
 import { BLUE } from '../utils/color';
@@ -12,9 +12,10 @@ export default sfc({
   props: {
     ...pickerProps,
     columns: Array,
-    defaultIndex: {
-      type: Number,
-      default: 0
+    defaultIndex: Number,
+    toolbarPosition: {
+      type: String,
+      default: 'top'
     },
     valueKey: {
       type: String,
@@ -131,6 +132,7 @@ export default sfc({
     },
 
     onConfirm() {
+      this.children.map(child => child.stopMomentum());
       this.emit('confirm');
     },
 
@@ -159,14 +161,14 @@ export default sfc({
     const Toolbar = this.showToolbar && (
       <div class={['van-hairline--top-bottom', bem('toolbar')]}>
         {this.slots() || [
-          <div class={bem('cancel')} onClick={this.onCancel}>
+          <div role="button" tabindex="0" class={bem('cancel')} onClick={this.onCancel}>
             {this.cancelButtonText || t('cancel')}
           </div>,
           this.slots('title') ||
             (this.title && (
               <div class={['van-ellipsis', bem('title')]}>{this.title}</div>
             )),
-          <div class={bem('confirm')} onClick={this.onConfirm}>
+          <div role="button" tabindex="0" class={bem('confirm')} onClick={this.onConfirm}>
             {this.confirmButtonText || t('confirm')}
           </div>
         ]}
@@ -175,7 +177,7 @@ export default sfc({
 
     return (
       <div class={bem()}>
-        {Toolbar}
+        {this.toolbarPosition === 'top' ? Toolbar : h()}
         {this.loading ? <Loading class={bem('loading')} color={BLUE} /> : h()}
         <div class={bem('columns')} style={columnsStyle} onTouchmove={preventDefault}>
           {columns.map((item, index) => (
@@ -194,6 +196,7 @@ export default sfc({
           <div class={bem('mask')} style={maskStyle} />
           <div class={['van-hairline--top-bottom', bem('frame')]} style={frameStyle} />
         </div>
+        {this.toolbarPosition === 'bottom' ? Toolbar : h()}
       </div>
     );
   }

@@ -63,11 +63,14 @@ Search 默认支持 Input 标签所有的原生属性，比如 `maxlength`、`pl
 | label | 搜索框左侧文本 | `String` | - | 1.6.6 |
 | shape | 形状，可选值为 `round` | `String` | `square` | 1.6.6 |
 | background | 搜索框背景色 | `String` | `#f2f2f2` | - |
+| clearable | 是否启用清除控件 | `Boolean` | `true` | 2.0.0 |
 | show-action | 是否在搜索框右侧显示取消按钮 | `Boolean` | `false` | - |
 | disabled | 是否禁用输入框 | `Boolean` | `false` | - |
-| readonly | 是否只读 | `Boolean` | `false` | - |
+| readonly | 是否将输入框设为只读 | `Boolean` | `false` | - |
 | error | 是否将输入内容标红 | `Boolean` | `false` | - |
 | input-align | 输入框内容对齐方式，可选值为 `center` `right` | `String` | `left` | - |
+| left-icon | 输入框左侧图标名称或图片链接，可选值见 Icon 组件 | `String` | `search` | 2.0.0 |
+| right-icon | 输入框右侧图标名称或图片链接，可选值见 Icon 组件 | `String` | - | 2.0.0 |
 
 ### Events
 
@@ -83,6 +86,7 @@ Search 默认支持 Input 标签所有的原生事件，如 `focus`、`blur`、`
 
 | 名称 | 说明 |
 |------|------|
-| action | 自定义搜索框右侧按钮，需要在`showAction`为 true 时才会显示 |
-| left-icon | 自定义输入框头部图标 |
 | label | 自定义搜索框左侧文本 |
+| action | 自定义搜索框右侧按钮，需要在`showAction`为 true 时才会显示 |
+| left-icon | 自定义输入框左侧图标 |
+| right-icon | 自定义输入框右侧图标 |

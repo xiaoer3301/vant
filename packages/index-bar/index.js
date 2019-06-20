@@ -1,16 +1,37 @@
 import { use } from '../utils';
 import { TouchMixin } from '../mixins/touch';
 import { ParentMixin } from '../mixins/relation';
+import { BindEventMixin } from '../mixins/bind-event';
+import { GREEN } from '../utils/color';
+import { getScrollTop, getElementTop, getScrollEventTarget } from '../utils/dom/scroll';
 
 const [sfc, bem] = use('index-bar');
 
 export default sfc({
-  mixins: [TouchMixin, ParentMixin('vanIndexBar')],
+  mixins: [
+    TouchMixin,
+    ParentMixin('vanIndexBar'),
+    BindEventMixin(function (bind) {
+      if (!this.scroller) {
+        this.scroller = getScrollEventTarget(this.$el);
+      }
+
+      bind(this.scroller, 'scroll', this.onScroll);
+    })
+  ],
 
   props: {
+    sticky: {
+      type: Boolean,
+      default: true
+    },
     zIndex: {
       type: Number,
       default: 1
+    },
+    highlightColor: {
+      type: String,
+      default: GREEN
     },
     indexList: {
       type: Array,
@@ -27,13 +48,66 @@ export default sfc({
     }
   },
 
+  data() {
+    return {
+      activeAnchorIndex: null
+    };
+  },
+
+  computed: {
+    highlightStyle() {
+      const { highlightColor } = this;
+      if (highlightColor) {
+        /* istanbul ignore else */
+        return {
+          color: highlightColor
+        };
+      }
+    }
+  },
+
   methods: {
-    onClick(event) {
-      this.scrollToElement(event.target);
+    onScroll() {
+      if (!this.sticky) {
+        return;
+      }
+
+      const scrollTop = getScrollTop(this.scroller);
+      const rects = this.children.map(item => ({
+        height: item.height,
+        top: getElementTop(item.$el)
+      }));
+
+      const active = this.getActiveAnchorIndex(scrollTop, rects);
+
+      this.activeAnchorIndex = this.indexList[active];
+      this.children.forEach((item, index) => {
+        if (index === active) {
+          item.active = true;
+          item.top = Math.max(0, rects[index].top - scrollTop);
+        } else if (index === active - 1) {
+          const activeItemTop = rects[active].top - scrollTop;
+          item.active = activeItemTop > 0;
+          item.top = activeItemTop - item.height;
+        } else {
+          item.active = false;
+        }
+      });
     },
 
-    onTouchStart(event) {
-      this.touchStart(event);
+    getActiveAnchorIndex(scrollTop, rects) {
+      for (let i = this.children.length - 1; i >= 0; i--) {
+        const prevHeight = i > 0 ? rects[i - 1].height : 0;
+
+        if (scrollTop + prevHeight >= rects[i].top) {
+          return i;
+        }
+      }
+      return -1;
+    },
+
+    onClick(event) {
+      this.scrollToElement(event.target);
     },
 
     onTouchMove(event) {
@@ -47,15 +121,19 @@ export default sfc({
 
         const { clientX, clientY } = event.touches[0];
         const target = document.elementFromPoint(clientX, clientY);
-        this.scrollToElement(target);
+        if (target) {
+          const { index } = target.dataset;
+
+          /* istanbul ignore else */
+          if (this.touchActiveIndex !== index) {
+            this.touchActiveIndex = index;
+            this.scrollToElement(target);
+          }
+        }
       }
     },
 
     scrollToElement(element, setActive) {
-      if (!element) {
-        return;
-      }
-
       const { index } = element.dataset;
       if (!index) {
         return;
@@ -80,13 +158,17 @@ export default sfc({
           class={bem('sidebar')}
           style={{ zIndex: this.zIndex }}
           onClick={this.onClick}
-          onTouchstart={this.onTouchStart}
+          onTouchstart={this.touchStart}
           onTouchmove={this.onTouchMove}
           onTouchend={this.onTouchEnd}
           onTouchcancel={this.onTouchEnd}
         >
           {this.indexList.map(index => (
-            <span class={bem('index')} data-index={index}>
+            <span
+              class={bem('index')}
+              style={index === this.activeAnchorIndex ? this.highlightStyle : null}
+              data-index={index}
+            >
               {index}
             </span>
           ))}

@@ -75,6 +75,46 @@ export default {
 };
 ```
 
+### With Popup
+
+```html
+<van-field
+  readonly
+  clickable
+  label="City"
+  :value="value"
+  placeholder="Choose City"
+  @click="showPicker = true"
+/>
+
+<van-popup v-model="showPicker" position="bottom">
+  <van-picker
+    show-toolbar
+    :columns="columns"
+    @cancel="showPicker = false"
+    @confirm="onConfirm"
+  />
+</van-popup>
+```
+
+```js
+export default {
+  data() {
+    return {
+      value: '',
+      showPicker: false,
+      columns: ['Delaware', 'Florida', 'Georqia', 'Indiana', 'Maine']
+    }
+  },
+  methods: {
+    onConfirm(value) {
+      this.value = value;
+      this.showPicker = false;
+    }
+  }
+};
+```
+
 ### Disable option
 
 ```html
@@ -147,6 +187,7 @@ When Picker columns data is acquired asynchronously, use `loading` prop to show 
 |------|------|------|------|
 | columns | Columns data | `Array` | `[]` |
 | show-toolbar | Whether to show toolbar | `Boolean` | `false` |
+| toolbar-position | Toolbar position, cat be set to `bottom` | `String` | `top` |
 | title | Toolbar title | `String` | `''` |
 | loading | Whether to show loading prompt | `Boolean` | `false` |
 | value-key | Key of option text | `String` | `text` |

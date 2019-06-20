@@ -1,11 +1,11 @@
 import { use } from '../utils';
-import { preventDefault } from '../utils/event';
 
 const [sfc, bem] = use('key');
 
 export default sfc({
   props: {
-    type: Array,
+    type: String,
+    theme: Array,
     text: [String, Number]
   },
 
@@ -17,21 +17,31 @@ export default sfc({
 
   computed: {
     className() {
-      const types = this.type.slice(0);
-      this.active && types.push('active');
-      return bem(types);
+      const classNames = this.theme.slice(0);
+
+      if (this.active) {
+        classNames.push('active');
+      }
+
+      if (this.type) {
+        classNames.push(this.type);
+      }
+
+      return bem(classNames);
     }
   },
 
   methods: {
     onFocus() {
       this.active = true;
-      this.$emit('press', this.text);
     },
 
     onBlur(event) {
-      preventDefault(event, true);
       this.active = false;
+    },
+
+    onClick() {
+      this.$emit('press', this.text, this.type);
     }
   },
 
@@ -39,13 +49,16 @@ export default sfc({
     const { onBlur } = this;
     return (
       <i
+        role="button"
+        tabindex="0"
         class={['van-hairline', this.className]}
+        onClick={this.onClick}
         onTouchstart={this.onFocus}
         onTouchmove={onBlur}
         onTouchend={onBlur}
         onTouchcancel={onBlur}
       >
-        {this.text}
+        {this.slots('default') || this.text}
       </i>
     );
   }

@@ -64,6 +64,8 @@ export default {
 |------|------|------|------|
 | index-list | Index List | `Array` | `A-Z` |
 | z-index | z-index | `Number` | `1` |
+| sticky | Whether to enable anchor sticky top | `Boolean` | `true` |
+| highlight-color | Index character highlight color | `String` | `#07c160` | - |
 
 ### IndexAnchor Props
 

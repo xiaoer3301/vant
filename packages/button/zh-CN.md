@@ -42,7 +42,7 @@ Vue.use(Button);
 
 ### 禁用状态
 
-通过`disabled`属性来禁用按钮，此时按钮不可点击
+通过`disabled`属性来禁用按钮，禁用状态下按钮不可点击
 
 ```html
 <van-button disabled type="primary">禁用状态</van-button>
@@ -51,21 +51,31 @@ Vue.use(Button);
 
 ### 加载状态
 
+通过`loading`属性设置按钮为加载状态，加载状态下默认会隐藏按钮文字，可以通过`loading-text`设置加载状态下的文字
+
 ```html 
 <van-button loading type="primary" />
-<van-button
-  loading
-  type="danger"
-  loading-type="spinner"
-  loading-text="加载中..."
-/>
+<van-button loading type="primary" loading-type="spinner" />
+<van-button loading type="danger" loading-text="加载中..." />
 ```
 
 ### 按钮形状
 
+通过`square`设置方形按钮，通过`round`设置圆形按钮
+
 ```html 
 <van-button square type="primary">方形按钮</van-button>
 <van-button round type="danger">圆形按钮</van-button>
+```
+
+### 图标按钮
+
+通过`icon`属性设置按钮图标，支持 Icon 组件里的所有图标，也可以传入图标 URL
+
+```html 
+<van-button icon="star-o" type="primary" />
+<van-button icon="star-o" type="primary">按钮</van-button>
+<van-button icon="https://img.yzcdn.cn/vant/logo.png" type="danger">按钮</van-button>
 ```
 
 ### 按钮尺寸
@@ -87,9 +97,10 @@ Vue.use(Button);
 |------|------|------|------|------|
 | type | 类型，可选值为 `primary` `info` `warning` `danger` | `String` | `default` | 1.6.6 |
 | size | 尺寸，可选值为 `large` `small` `mini` | `String` | `normal` | - |
-| text | 文字 | `String` | - | - |
+| text | 按钮文字 | `String` | - | - |
+| icon | 左侧图标名称或图片链接，可选值见 Icon 组件 | `String` | - | 2.0.0 |
 | tag | HTML 标签 | `String` | `button` | - |
-| native-type | 原生 type 属性 | `String` | - | - |
+| native-type | 原生 button 标签 type 属性 | `String` | - | - |
 | block | 是否为块级元素 | `Boolean` | `false` | - |
 | plain | 是否为朴素按钮 | `Boolean` | `false` | 1.1.13 |
 | square | 是否为方形按钮 | `Boolean` | `false` | 1.2.0 |
@@ -109,4 +120,4 @@ Vue.use(Button);
 | 事件名 | 说明 | 回调参数 |
 |------|------|------|
 | click | 点击按钮，且按钮状态不为加载或禁用时触发 | event: Event |
-| touchstart | 原生 touchstart 事件 | event: TouchEvent |
+| touchstart | 开始触摸按钮时触发 | event: TouchEvent |

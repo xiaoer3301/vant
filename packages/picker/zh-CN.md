@@ -81,6 +81,46 @@ export default {
 };
 ```
 
+### 搭配弹出层使用
+
+```html
+<van-field
+  readonly
+  clickable
+  label="城市"
+  :value="value"
+  placeholder="选择城市"
+  @click="showPicker = true"
+/>
+
+<van-popup v-model="showPicker" position="bottom">
+  <van-picker
+    show-toolbar
+    :columns="columns"
+    @cancel="showPicker = false"
+    @confirm="onConfirm"
+  />
+</van-popup>
+```
+
+```js
+export default {
+  data() {
+    return {
+      value: '',
+      showPicker: false,
+      columns: ['杭州', '宁波', '温州', '嘉兴', '湖州']
+    }
+  },
+  methods: {
+    onConfirm(value) {
+      this.value = value;
+      this.showPicker = false;
+    }
+  }
+};
+```
+
 ### 禁用选项
 
 选项可以为对象结构，通过设置 disabled 来禁用该选项
@@ -155,6 +195,7 @@ export default {
 |------|------|------|------|------|
 | columns | 对象数组，配置每一列显示的数据 | `Array` | `[]` | - |
 | show-toolbar | 是否显示顶部栏 | `Boolean` | `false` | - |
+| toolbar-position | 顶部栏位置，可选值为`bottom` | `String` | `top` | 2.0.0 |
 | title | 顶部栏标题 | `String` | `''` | - |
 | loading | 是否显示加载状态 | `Boolean` | `false` | - |
 | value-key | 选项对象中，文字对应的 key | `String` | `text` | - |
